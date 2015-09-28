@@ -1,0 +1,14 @@
+# Change DNS settings easily
+alias setdns='networksetup -setdnsservers Wi-Fi'
+alias getdns='networksetup -getdnsservers Wi-Fi'
+
+alias dockercleanup='docker rmi -f $(docker images -q --filter "dangling=true")'
+alias git_delete_merged_branches='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
+
+alias chkpath="echo $PATH |tr \':\' \'\\\n\' |xargs ls -ld"
+
+# git squash for some projects that like it
+#squash = !f(){ CUR=`git rev-parse HEAD` && git reset --soft ${1} && git commit -m "$(git log --format=%B ${1}..${CUR})"; };f 
+
+# simple bandwidth check
+alias bt='wget http://cachefly.cachefly.net/100mb.test -O /dev/null'

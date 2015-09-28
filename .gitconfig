@@ -1,0 +1,36 @@
+[core]
+  # trying to get this working https://github.com/paulirish/dotfiles/commit/6743b907ff586c28cd36e08d1e1c634e2968893e
+  #pager = zsh -lc 'diff-highlight | strip_diff_leading_symbols | less -r' -
+[alias]
+  st = status
+  co = checkout
+  ci = commit
+  br = branch
+  pullom = pull origin master
+  pushom = push origin master
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  incoming = log HEAD..origin
+  outgoing = log origin..HEAD
+[color]
+  ui = true
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+[color "diff-highlight"]
+  oldNormal = "red bold"
+  oldHighlight = "red bold 52"
+  newNormal = "green bold"
+  newHighlight = "green bold 22"
+[push]
+  default = current
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+[merge]
+  tool = opendiff
+[merge]
+  tool = opendiff
+[user]
+  name = Elliot Murphy
+  email = statik@users.noreply.github.com
+
