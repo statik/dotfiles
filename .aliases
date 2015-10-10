@@ -12,3 +12,4 @@ alias chkpath="echo $PATH |tr \':\' \'\\\n\' |xargs ls -ld"
 
 # simple bandwidth check
 alias bt='wget http://cachefly.cachefly.net/100mb.test -O /dev/null'
+alias dig='dig +short +noshort'
