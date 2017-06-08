@@ -22,7 +22,7 @@
   newNormal = "green bold"
   newHighlight = "green bold 22"
 [push]
-  default = current
+	default = nothing
 [color "branch"]
   current = yellow reverse
   local = yellow
@@ -33,4 +33,20 @@
 [user]
   name = Elliot Murphy
   email = statik@users.noreply.github.com
+  signingkey = BF72FC3D
 
+[diff]
+	compactionHeuristic = true
+[pager]
+	log = diff-highlight | less
+	show = diff-highlight | less
+	diff = diff-highlight | less
+[interactive]
+	diffFilter = diff-highlight
+[commit]
+	gpgsign = true
+        template = ~/.gitmessage
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true
