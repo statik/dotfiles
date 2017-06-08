@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# get certs served by a TLS endpoint
+host=${1};
+port=${2:-443};
+
+openssl s_client -connect ${host}:${port} 2> /dev/null </dev/null | sed -n '/-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/p'
+
