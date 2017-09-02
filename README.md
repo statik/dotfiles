@@ -6,4 +6,5 @@ brew install stow
 stow shell
 stow git
 stow ruby
+stow zsh
 

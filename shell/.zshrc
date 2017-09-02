@@ -14,6 +14,11 @@ fi
 
 setopt MENU_COMPLETE
 setopt GLOB_COMPLETE
+CASE_SENSITIVE="false"
+HYPHEN_INSENSITIVE="true"
+ENABLE_CORRECTION="false"
+HIST_STAMPS="yyyy-mm-dd"
+HIST_IGNORE_SPACE="true"
 
 launchctl setenv GOPATH $HOME/go
 export GOPATH=$HOME/go
@@ -60,6 +65,9 @@ export PATH=$PATH:/usr/local/opt/go/libexec/bin
 # maven 3. what have I done with my life?
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
 export PATH=$PATH:~/apache-maven-3.5.0/bin
+
+# z, jump around
+. /usr/local/etc/profile.d/z.sh
 
 
 # added by travis gem
