@@ -1,0 +1,26 @@
+\set QUIET 1
+\pset null '¤'
+\pset linestyle 'unicode'
+\pset unicode_border_linestyle single
+\pset unicode_column_linestyle single
+\pset unicode_header_linestyle double
+set intervalstyle to 'postgresq_verbose';
+
+\setenv LESS '-iMFXSx4R'
+\set ON_ERROR_STOP on
+\set ON_ERROR_ROLLBACK interactive
+
+-- Customize prompts
+\set PROMPT1 '%[%033[1m%][%/] # '
+\set PROMPT2 '... # '
+
+-- Show how long each query takes to execute
+\timing
+
+-- Use best available output format
+\x auto
+\set VERBOSITY verbose
+\set HISTFILE ~/.psql_history- :DBNAME
+\set HISTCONTROL ignoredups
+\set COMP_KEYWORD_CASE upper
+\unset QUIET

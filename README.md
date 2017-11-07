@@ -7,4 +7,5 @@ stow shell
 stow git
 stow ruby
 stow zsh
+stow psql
 

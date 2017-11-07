@@ -44,9 +44,14 @@
 [interactive]
 	diffFilter = diff-highlight
 [commit]
-	gpgsign = true
+	#gpgsign = true
         template = ~/.gitmessage
+	gpgSign = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	required = true
+[gpg]
+	program = /usr/local/bin/krgpg
+[tag]
+	forceSignAnnotated = true
