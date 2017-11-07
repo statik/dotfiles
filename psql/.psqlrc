@@ -4,18 +4,20 @@
 \pset unicode_border_linestyle single
 \pset unicode_column_linestyle single
 \pset unicode_header_linestyle double
-set intervalstyle to 'postgresq_verbose';
+set intervalstyle to 'postgres_verbose';
 
 \setenv LESS '-iMFXSx4R'
 \set ON_ERROR_STOP on
 \set ON_ERROR_ROLLBACK interactive
 
 -- Customize prompts
-\set PROMPT1 '%[%033[1m%][%/] # '
+\set PROMPT1 '%[%033[1m%][%M:%> %n@%/] %x%# '
 \set PROMPT2 '... # '
 
 -- Show how long each query takes to execute
 \timing
+
+\set ECHO_HIDDEN true
 
 -- Use best available output format
 \x auto
