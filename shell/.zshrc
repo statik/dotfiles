@@ -20,7 +20,9 @@ ENABLE_CORRECTION="false"
 HIST_STAMPS="yyyy-mm-dd"
 HIST_IGNORE_SPACE="true"
 
-launchctl setenv GOPATH $HOME/go
+# should not be needed with modern go 
+#launchctl setenv GOPATH $HOME/go
+
 export GOPATH=$HOME/go
 export PATH=$HOME/bin:$PATH:$GOPATH/bin
 export GO15VENDOREXPERIMENT=1
@@ -39,22 +41,27 @@ source $(brew --prefix nvm)/nvm.sh
 # android SDK
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
+if [[ -f "$HOME/.rbenv/bin/rbenv" ]]; then
+  export PATH=$PATH:~/.rbenv/bin
+  # dat ruby
+  eval "$(rbenv init -)"
+fi
 
-# dat ruby
-eval "$(rbenv init -)"
 
 # nix package manager
-. $HOME/.nix-profile/etc/profile.d/nix.sh
+if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
+  . $HOME/.nix-profile/etc/profile.d/nix.sh
+fi
 
 # yubikey protected ssh
-GPG_TTY=$(tty)
-export GPG_TTY
+#GPG_TTY=$(tty)
+#export GPG_TTY
 
-if [ -f ~/.gpg-agent-info ]; then
-    source ~/.gpg-agent-info
-    export GPG_AGENT_INFO
-    export SSH_AUTH_SOCK
-fi
+#if [ -f ~/.gpg-agent-info ]; then
+#    source ~/.gpg-agent-info
+#    export GPG_AGENT_INFO
+#    export SSH_AUTH_SOCK
+#fi
 
 function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
 
@@ -63,20 +70,26 @@ export PATH=$PATH:/usr/local/pgsql/bin
 export PATH=$PATH:/usr/local/opt/go/libexec/bin
 
 # maven 3. what have I done with my life?
+# TODO make this conditional for OSX
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
 export PATH=$PATH:~/apache-maven-3.5.0/bin
 
 # z, jump around
-. /usr/local/etc/profile.d/z.sh
+# TODO make this conditional
+#. /usr/local/etc/profile.d/z.sh
 
 
 # added by travis gem
-[ -f /Users/emurphy/.travis/travis.sh ] && source /Users/emurphy/.travis/travis.sh
+#[ -f /Users/emurphy/.travis/travis.sh ] && source /Users/emurphy/.travis/travis.sh
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/emurphy/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/emurphy/google-cloud-sdk/path.zsh.inc'; fi
+#if [ -f '/Users/emurphy/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/emurphy/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/emurphy/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/emurphy/google-cloud-sdk/completion.zsh.inc'; fi
+
+export PATH="/home/emurphy/.linuxbrew/bin:$PATH"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

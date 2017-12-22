@@ -46,7 +46,7 @@
 [commit]
 	#gpgsign = true
         template = ~/.gitmessage
-	gpgSign = true
+	#gpgSign = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
