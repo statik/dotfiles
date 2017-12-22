@@ -15,3 +15,10 @@ alias bt='wget http://cachefly.cachefly.net/100mb.test -O /dev/null'
 alias dig='dig +short +noshort'
 
 alias la="exa -abghl --git --color=automatic"
+
+
+# some helpers for ssh tunnel proxies from
+# http://www.starkandwayne.com/blog/setting-up-an-ssh-tunnel-with-ssh-config/
+alias proxy-on='ssh -fN dmz-proxy'
+alias proxy-check='ssh -O check dmz-proxy'
+alias proxy-off='ssh -O exit dmz-proxy'
