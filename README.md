@@ -8,4 +8,4 @@ stow git
 stow ruby
 stow zsh
 stow psql
-
+stow vim
