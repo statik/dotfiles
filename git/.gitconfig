@@ -27,12 +27,11 @@
   current = yellow reverse
   local = yellow
 [merge]
-  tool = opendiff
 [merge]
-  tool = opendiff
+	tool = opendiff
 [user]
-  name = Elliot Murphy
-  email = statik@users.noreply.github.com
+	name = Elliot Murphy
+	email = statik@users.noreply.github.com
   signingkey = BF72FC3D
 
 [diff]
@@ -46,11 +45,12 @@
 [commit]
 	#gpgsign = true
         template = ~/.gitmessage
-	#gpgSign = true
+	gpgSign = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	required = true
+	process = git-lfs filter-process
 [gpg]
 	program = /usr/local/bin/krgpg
 [tag]

@@ -22,3 +22,4 @@ alias la="exa -abghl --git --color=automatic"
 alias proxy-on='ssh -fN dmz-proxy'
 alias proxy-check='ssh -O check dmz-proxy'
 alias proxy-off='ssh -O exit dmz-proxy'
+alias dc='docker-compose'

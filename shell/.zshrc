@@ -41,8 +41,7 @@ source $(brew --prefix nvm)/nvm.sh
 # android SDK
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
-if [[ -f "$HOME/.rbenv/bin/rbenv" ]]; then
-  export PATH=$PATH:~/.rbenv/bin
+if [[ -f "$HOME/.rbenv/version" ]]; then
   # dat ruby
   eval "$(rbenv init -)"
 fi
