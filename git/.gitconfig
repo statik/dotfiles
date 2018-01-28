@@ -28,12 +28,10 @@
   current = yellow reverse
   local = yellow
 [merge]
-[merge]
 	tool = opendiff
 [user]
-	name = Elliot Murphy
-	email = statik@users.noreply.github.com
-  signingkey = BF72FC3D
+  name = Elliot Murphy
+  email = statik@users.noreply.github.com
 
 [diff]
 	compactionHeuristic = true
@@ -44,17 +42,18 @@
 [interactive]
 	diffFilter = diff-highlight
 [commit]
-	#gpgsign = true
-        template = ~/.gitmessage
-	gpgSign = true
+  template = ~/.gitmessage
+	#gpgSign = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	required = true
 	process = git-lfs filter-process
 [gpg]
-	program = /usr/local/bin/krgpg
+	#program = /usr/local/bin/krgpg
 [tag]
 	forceSignAnnotated = true
 [core]
 	excludesfile = /Users/emurphy/.gitignore
+[commit]
+	template = ~/.gitmessage

@@ -24,8 +24,13 @@ HIST_IGNORE_SPACE="true"
 #launchctl setenv GOPATH $HOME/go
 
 export GOPATH=$HOME/go
-export PATH=$HOME/bin:$PATH:$GOPATH/bin
+export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
 export GO15VENDOREXPERIMENT=1
+
+# used for the HavenGRC deployment of helm/tiller on OpenShift
+# project is named haven-tiller
+export TILLER_NAMESPACE=haven-tiller
+
 
 source ~/.aliases
 source ~/.functions
