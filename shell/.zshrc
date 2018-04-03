@@ -92,3 +92,16 @@ export PATH="/home/emurphy/.linuxbrew/bin:$PATH"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# virtualenvwrapper
+
+2
+export WORKON_HOME=~/.venv
+source /usr/local/bin/virtualenvwrapper.sh
+
+# fasd https://github.com/clvv/fasd
+# inspired by autojump and Z
+eval "$(fasd --init auto)"
+
+# rust path
+export PATH="$HOME/.cargo/bin:$PATH"
