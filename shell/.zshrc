@@ -95,7 +95,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # virtualenvwrapper
 
-2
 export WORKON_HOME=~/.venv
 source /usr/local/bin/virtualenvwrapper.sh
 
@@ -105,3 +104,9 @@ eval "$(fasd --init auto)"
 
 # rust path
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# Added by Krypton
+export GPG_TTY=$(tty)
+
+# python3 user path (for stuff installed with pip install --user)
+export PATH=$PATH:/Users/emurphy/Library/Python/3.6/bin
