@@ -22,10 +22,24 @@ HIST_IGNORE_SPACE="true"
 
 # should not be needed with modern go 
 #launchctl setenv GOPATH $HOME/go
+#
+#
+
+platform='unknown'
+unamestr=`uname`
+if [[ "$unamestr" == 'Linux' ]]; then
+   platform='linux'
+elif [[ "$unamestr" == 'Darwin' ]]; then
+   platform='osx'
+fi
 
 export GOPATH=$HOME/go
-export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
 export GO15VENDOREXPERIMENT=1
+if [[ $platform == 'linux' ]]; then
+    export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
+elif [[ $platform == 'osx' ]]; then
+	  export PATH=$PATH:/usr/local/opt/go/libexec/bin
+fi
 
 # used for the HavenGRC deployment of helm/tiller on OpenShift
 # project is named haven-tiller
@@ -71,7 +85,7 @@ function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
 
 export PATH=$PATH:/usr/local/pgsql/bin
 
-export PATH=$PATH:/usr/local/opt/go/libexec/bin
+export PATH=$PATH:/usr/lib/go-1.10/bin
 
 # maven 3. what have I done with my life?
 # TODO make this conditional for OSX
