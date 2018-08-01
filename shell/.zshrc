@@ -128,4 +128,4 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export GPG_TTY=$(tty)
 
 # python3 user path (for stuff installed with pip install --user)
-export PATH=$PATH:/Users/emurphy/Library/Python/3.6/bin
+export PATH=$PATH:/Users/emurphy/Library/Python/3.7/bin
