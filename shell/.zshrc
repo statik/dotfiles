@@ -36,9 +36,15 @@ fi
 export GOPATH=$HOME/go
 export GO15VENDOREXPERIMENT=1
 if [[ $platform == 'linux' ]]; then
-    export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
+  export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
+  export PATH=$PATH:/usr/lib/go-1.10/bin
 elif [[ $platform == 'osx' ]]; then
-	  export PATH=$PATH:/usr/local/opt/go/libexec/bin
+  export PATH=$HOME/bin:$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
+  # maven 3. what have I done with my life?
+  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
+  export PATH=$PATH:~/apache-maven-3.5.0/bin
+  # python3 user path (for stuff installed with pip install --user)
+  export PATH=$PATH:/Users/emurphy/Library/Python/3.7/bin
 fi
 
 # used for the HavenGRC deployment of helm/tiller on OpenShift
@@ -85,12 +91,7 @@ function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
 
 export PATH=$PATH:/usr/local/pgsql/bin
 
-export PATH=$PATH:/usr/lib/go-1.10/bin
 
-# maven 3. what have I done with my life?
-# TODO make this conditional for OSX
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
-export PATH=$PATH:~/apache-maven-3.5.0/bin
 
 # z, jump around
 # TODO make this conditional
@@ -127,5 +128,3 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # Added by Krypton
 export GPG_TTY=$(tty)
 
-# python3 user path (for stuff installed with pip install --user)
-export PATH=$PATH:/Users/emurphy/Library/Python/3.7/bin
