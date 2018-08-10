@@ -27,3 +27,7 @@ alias dc='docker-compose'
 # https://theptrk.com/2018/07/11/did-txt-file/
 alias did="vim +'normal Go' +'r!date' ~/Dropbox/did.txt"
 alias cdh='cd ~/go/src/github.com/kindlyops/mappamundi'
+
+# helpers for reversing gron https://github.com/tomnomnom/gron
+alias norg="gron --ungron"
+alias ungron="gron --ungron"
