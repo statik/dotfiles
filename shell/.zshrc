@@ -128,3 +128,11 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # Added by Krypton
 export GPG_TTY=$(tty)
 
+
+if [[ $(hostname) == "havendev" ]]; then
+	echo "tmuxing"
+	tmux has-session && exec tmux attach || exec tmux
+else
+	echo "not tmuxing"
+fi
+
