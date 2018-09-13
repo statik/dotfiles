@@ -128,7 +128,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # Added by Krypton
 export GPG_TTY=$(tty)
 
-
 if [[ $(hostname) == "havendev" ]]; then
 	echo "tmuxing"
 	tmux has-session && exec tmux attach || exec tmux
@@ -136,3 +135,5 @@ else
 	echo "not tmuxing"
 fi
 
+USER_BASE_PATH=$(python -m site --user-base)
+export PATH=$PATH:$USER_BASE_PATH/bin
