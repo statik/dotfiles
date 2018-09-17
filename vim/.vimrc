@@ -21,3 +21,12 @@ autocmd Syntax * syntax match sensibleWhitespaceError excludenl /\s\+\%#\@<!$\| 
 
 " map ctrl-\ t to run GoTests
 map <Leader>t GoTest
+
+
+if has('mac')
+    " fzf installed via homebrew
+		set rtp+=/usr/local/opt/fzf
+elseif has('unix')
+    " fzf installed via linuxbrew
+		set rtp+=/home/emurphy/.linuxbrew/opt/fzf
+endif
