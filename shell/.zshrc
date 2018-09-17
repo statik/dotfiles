@@ -137,3 +137,6 @@ fi
 
 USER_BASE_PATH=$(python -m site --user-base)
 export PATH=$PATH:$USER_BASE_PATH/bin
+
+# tweak fzf fuzzy finder to ignore some directories
+export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules --ignore vendor --ignore bazel-bin --ignore bazel-out -g ""'
