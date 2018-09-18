@@ -129,8 +129,8 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export GPG_TTY=$(tty)
 
 if [[ $(hostname) == "havendev" ]]; then
-	echo "tmuxing"
-	tmux has-session && exec tmux attach || exec tmux
+	echo "HAVENDEV"
+	#tmux has-session && exec tmux attach || exec tmux
 else
 	echo "not tmuxing"
 fi
@@ -139,4 +139,4 @@ USER_BASE_PATH=$(python -m site --user-base)
 export PATH=$PATH:$USER_BASE_PATH/bin
 
 # tweak fzf fuzzy finder to ignore some directories
-export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules --ignore vendor --ignore bazel-bin --ignore bazel-out -g ""'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --glob "!vendor/*" --glob "!bazel-bin/*" --glob "!bazel-out/*"'
