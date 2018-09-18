@@ -139,4 +139,9 @@ USER_BASE_PATH=$(python -m site --user-base)
 export PATH=$PATH:$USER_BASE_PATH/bin
 
 # tweak fzf fuzzy finder to ignore some directories
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --glob "!vendor/*" --glob "!bazel-bin/*" --glob "!bazel-out/*"'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!{.git,*/vendor,bazel-bin,bazel-out}/*"'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+#fuzzyvim () { vim $(fzf); }
+#zle -N fuzzyvim
+#bindkey '^t' fuzzyvim
+
