@@ -45,6 +45,8 @@ elif [[ $platform == 'osx' ]]; then
   export PATH=$PATH:~/apache-maven-3.5.0/bin
   # python3 user path (for stuff installed with pip install --user)
   export PATH=$PATH:/Users/emurphy/Library/Python/3.7/bin
+  # Postgres.app path
+  export PATH=/Applications/Postgres.app/Contents/Versions/10/bin:$PATH
 fi
 
 # used for the HavenGRC deployment of helm/tiller on OpenShift
@@ -89,7 +91,8 @@ fi
 
 function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
 
-export PATH=$PATH:/usr/local/pgsql/bin
+#export PATH=$PATH:/usr/local/pgsql/bin
+export PGHOST=localhost
 
 
 
@@ -145,3 +148,16 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 #zle -N fuzzyvim
 #bindkey '^t' fuzzyvim
 
+# this is a hack to get capybara-webkit gem installed on OSX Mojave
+# in order to do some client work on a TOP SECRET THING
+# https://github.com/thoughtbot/capybara-webkit/issues/1072#issuecomment-430311949
+export PATH="/Users/emurphy/Qt5.5.0/5.5/clang_64/bin/:$PATH"
+
+# set up direnv
+eval "$(direnv hook zsh)"
+
+# announce if working in aws-shell
+if [ -n "${AWS_VAULT}" ] ; then
+    echo -e "$(tput setab 1)WARNING: working in aws-vault env ${AWS_VAULT}$(tput sgr0)"
+    export PS1="$(tput setab 1)<<${AWS_VAULT}>>$(tput sgr0) ${PS1}";
+fi;
