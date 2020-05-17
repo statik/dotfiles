@@ -30,3 +30,10 @@ elseif has('unix')
     " fzf installed via linuxbrew
 		set rtp+=/home/emurphy/.linuxbrew/opt/fzf
 endif
+
+let g:ale_fixers = {
+	    \ 'javascript': ['prettier'],
+	    \ 'typescript': ['prettier'],
+	    \ 'css': ['prettier'],
+	    \}
+
