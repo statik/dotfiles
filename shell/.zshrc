@@ -66,7 +66,8 @@ export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
 # android SDK
-export ANDROID_HOME=/usr/local/opt/android-sdk
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 
 if [[ -f "$HOME/.rbenv/version" ]]; then
   # dat ruby
@@ -161,3 +162,6 @@ if [ -n "${AWS_VAULT}" ] ; then
     echo -e "$(tput setab 1)WARNING: working in aws-vault env ${AWS_VAULT}$(tput sgr0)"
     export PS1="$(tput setab 1)<<${AWS_VAULT}>>$(tput sgr0) ${PS1}";
 fi;
+
+# make aws vault login last longer than 15 minutes
+# export AWS_ASSUME_ROLE_TTL=60m

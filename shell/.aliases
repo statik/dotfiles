@@ -31,3 +31,6 @@ alias cdh='cd ~/go/src/github.com/kindlyops/mappamundi'
 # helpers for reversing gron https://github.com/tomnomnom/gron
 alias norg="gron --ungron"
 alias ungron="gron --ungron"
+
+# helpers for running cdk under bazel
+alias bcdk="bazel run //infra:cdk --"
