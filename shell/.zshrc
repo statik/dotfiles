@@ -61,6 +61,8 @@ source ~/.private
 export EDITOR=vim
 export VISUAL=vim
 
+test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
 # dat node version manager
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
@@ -120,7 +122,7 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # virtualenvwrapper
 
 export WORKON_HOME=~/.venv
-source /usr/local/bin/virtualenvwrapper.sh
+if [ -f '/usr/local/bin/virtualenvwrapper.sh' ]; then source /usr/local/bin/virtualenvwrapper.sh; fi
 
 # fasd https://github.com/clvv/fasd
 # inspired by autojump and Z
