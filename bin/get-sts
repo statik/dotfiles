@@ -1,6 +1,0 @@
-#!/bin/bash
-TOKEN_CODE=$1
-# TODO error checking for missing token code, help output
-
-MFA_DEVICE_SERIAL="arn:aws:iam::211129858938:mfa/emurphy"
-aws sts get-session-token --serial-number $MFA_DEVICE_SERIAL --token-code $TOKEN_CODE
