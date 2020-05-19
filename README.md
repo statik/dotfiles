@@ -1,11 +1,16 @@
 # dotfiles
-install zprezto
-install homebrew
-brew install stow
 
-stow shell
-stow git
-stow ruby
-stow zsh
-stow psql
-stow vim
+ * install zprezto
+ * install homebrew
+ * brew install stow
+
+## syncing
+ * stow shell
+ * stow git
+ * stow ruby
+ * stow zsh
+ * stow psql
+ * stow vim
+ * stow -t ~/bin bin
+
+
