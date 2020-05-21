@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+USAGE='tintit <inputfile> [outputfile]'
+DESCRIPTION='
+
+  Uses sharp-cli to tint an image with a chroma while preserving luminance
+
+  The outputfile is optional, if not provide will be based on the input file name
+  Chroma is defaulted to #2FA09D (Kindly Ops Green).
+
+  Dependencies: requires sharp cli to be installed.
+'
+
+
+function usage() {
+  echo "$USAGE" "$DESCRIPTION" >&2
+}
+
+type sharp >/dev/null 2>&1 || {
+  echo >&2 "Error: sharp cli must be installed (try npm i -g sharp-cli)"
+  usage
+  exit 1
+}
+
+[ $# -ge 1 ] || {
+  usage
+  exit 1
+}
+
+SOURCE_FILE="$1"
+FILENAME=$(basename -- "$SOURCE_FILE")
+SUFFIX="${SOURCE_FILE##*.}"
+BASE="${SOURCE_FILE%.*}"
+OUTPUT="${2:-${BASE}-tinted.${SUFFIX}}"
+
+
+
+# check file is readable
+[ -r "$FILENAME" ] || {
+  echo >&2 "Error: $FILENAME is not readable. Does it exist?"
+  usage
+  exit 1
+}
+
+# tint it!
+KINDLYOPS_PRIMARY_GREEN="rgba(47, 160, 157, 1)"
+# KINDLYOPS_PRIMARY_RED="rgba(232, 105, 83, 1)"
+
+sharp tint "$KINDLYOPS_PRIMARY_GREEN" -i "$FILENAME" -o "$OUTPUT"
