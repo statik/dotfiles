@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+[ -r "$HOME/bin/helpers.sh" ] || {
+  echo >&2 "Error: $HOME/bin/helpers.sh is not readable. Does it exist?"
+  exit 1
+}
+# shellcheck disable=SC1091,SC1090
+source "$HOME/bin/helpers.sh"
+export USAGE='aws-vault-shell <profile name>'
+# shellcheck disable=SC2016
+export DESCRIPTION='
+
+  Uses aws-vault to connect to AWS-SSO and run a subshell with temporary keys
+
+  Dependencies: requires aws-vault 6.0 or lataer to be installed.
+
+  Add something like this to your .bashrc or .zshrc to get a helpful reminder
+
+  if [ -n "${AWS_VAULT}" ] ; then
+     echo -e "$(tput setab 1)WARNING: working in aws-vault env ${AWS_VAULT}$(tput sgr0)"
+     export PS1="$(tput setab 1)<<${AWS_VAULT}>>$(tput sgr0) ${PS1}";
+  fi;
+'
+
+type aws-vault >/dev/null 2>&1 || {
+  e_error "Error: aws-vault cli must be installed (try brew install aws-vault)"
+  usage
+  exit 1
+}
+
+AWS_PROFILE_NAME=${1:-SandboxSSO}
+AWS_ASSUME_ROLE_TTL=${2:-3h}
+aws-vault exec "$AWS_PROFILE_NAME" --duration "$AWS_ASSUME_ROLE_TTL" "$SHELL"
