@@ -162,7 +162,7 @@ eval "$(direnv hook zsh)"
 # announce if working in aws-shell
 if [ -n "${AWS_VAULT}" ] ; then
     echo -e "$(tput setab 1)WARNING: working in aws-vault env ${AWS_VAULT}$(tput sgr0)"
-    export PS1="$(tput setab 1)<<${AWS_VAULT}>>$(tput sgr0) ${PS1}";
+    export PS1="$(tput setab 5)<<${AWS_VAULT}>>$(tput sgr0) ${PS1}";
 fi;
 
 # make aws vault login last longer than 15 minutes
