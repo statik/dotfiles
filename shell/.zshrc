@@ -37,7 +37,8 @@ export GOPATH=$HOME/go
 export GO15VENDOREXPERIMENT=1
 if [[ $platform == 'linux' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
-  export PATH=$PATH:/usr/lib/go-1.10/bin
+  #export PATH=$PATH:/usr/lib/go-1.10/bin
+	alias open=xdg-open
 elif [[ $platform == 'osx' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
   # maven 3. what have I done with my life?
