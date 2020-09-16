@@ -22,7 +22,7 @@ alias la="exa -abghl --git --color=automatic"
 alias proxy-on='ssh -fN dmz-proxy'
 alias proxy-check='ssh -O check dmz-proxy'
 alias proxy-off='ssh -O exit dmz-proxy'
-alias dc='docker-compose'
+alias edc='docker-compose'
 
 # https://theptrk.com/2018/07/11/did-txt-file/
 alias did="vim +'normal Go' +'r!date' ~/Dropbox/did.txt"
@@ -34,3 +34,5 @@ alias ungron="gron --ungron"
 
 # helpers for running cdk under bazel
 alias bcdk="bazel run //infra:cdk --"
+alias bcdk2="bazel run //infra:cdk2 --"
+alias bcdk3="bazel run //infra:cdk3 --"

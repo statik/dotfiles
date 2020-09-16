@@ -42,8 +42,8 @@ if [[ $platform == 'linux' ]]; then
 elif [[ $platform == 'osx' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
   # maven 3. what have I done with my life?
-  export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
-  export PATH=$PATH:~/apache-maven-3.5.0/bin
+  #export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
+  #export PATH=$PATH:~/apache-maven-3.5.0/bin
   # python3 user path (for stuff installed with pip install --user)
   export PATH=$PATH:/Users/emurphy/Library/Python/3.7/bin
   # Postgres.app path
@@ -70,6 +70,7 @@ source $(brew --prefix nvm)/nvm.sh
 
 # android SDK
 export ANDROID_HOME=$HOME/Library/Android/sdk
+export JAVA_HOME='/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home'
 export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 
 if [[ -f "$HOME/.rbenv/version" ]]; then
@@ -168,3 +169,7 @@ fi;
 
 # make aws vault login last longer than 15 minutes
 # export AWS_ASSUME_ROLE_TTL=60m
+#
+
+# CodeQL security scanning tools
+export PATH="$PATH":"$HOME/codeql-home/codeql"
