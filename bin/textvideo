@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# adapted from https://gist.github.com/crashGoBoom/1af67f7a2fc06e3d438dfeb9e0db3075
+# This will create a 5 second long mp4 file using the provided font, text and image with a fade in and out effect.
+_dur=5
+_framerate=30
+_fontfile="$HOME/bin/Roboto-Bold.ttf"
+_fontsize=30
+_fontcolor='white'
+_text='Hyperdeck Testing'
+_background_color='black'
+_drawtext="fontfile=${_fontfile}:fontsize=${_fontsize}"
+_fade="fade=in:0:25,fade=out:50:60"
+_logo="$HOME/bin/logo.png"
+
+ffmpeg \
+-f lavfi \
+-i color=c="${_background_color}":s=1280x720:d="${_dur}":r="${_framerate}" \
+-i ${_logo} \
+-filter_complex \
+"[0] drawtext=${_drawtext}:fontcolor=${_fontcolor}:x=(w-text_w)/2:y=(h-text_h)/1.1:text='${_text}', ${_fade}[b];[b] overlay=(W-w)/2:(H-h)/2, ${_fade}" \
+-f lavfi \
+-i anullsrc=channel_layout=hexadecagonal:sample_rate=48000 \
+-shortest \
+-acodec pcm_s16le \
+-timecode 00:00:00:00 \
+output.mov

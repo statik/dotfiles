@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-USAGE='convert-to-prores inputfile [outputfile] [prores setting 1 to 5, default 3]'
+USAGE='convert-to-prores inputfile [outputfile] [prores setting 1 to 5, default 1]'
 DESCRIPTION='
 
   Converts a video file to ProRes for playback on HyperDeck or NLE
 
   The outputfile is optional, if not provided it will be based on the input file name
   The profile switch takes an integer from -1 to 5 to match the ProRes profiles
-  Default is 3, hq 422
+  Default is 1, lt 422
     -1 auto (default)
      0 proxy    = 45Mbps YUV 4:2:2
      1 lt       = 102Mbps YUV 4:2:2
@@ -40,8 +40,10 @@ type ffmpeg >/dev/null 2>&1 || {
 
 input="$1"
 output="${2:-${1}.converted.mov}"
-profile="${3:-3}"
+profile="${3:-1}"
 
 echo "Converting from: $input to: $output"
 
-ffmpeg -i "$input" -c:v prores_ks -profile:v "$profile" -c:a pcm_s16le "$output"
+ffmpeg -i "$input" -c:v prores_ks -profile:v "$profile" -c:a pcm_s16le -f s16le -ac 2 -ar 16000 "$output"
+
+# ffmpeg -i output-audio.wav -s 1920x1080 -i input.yuv -r 24 -pix_fmt yuv422p10le -shortest -c:v v210 -c:a copy ouput.mov
