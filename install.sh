@@ -1,5 +1,11 @@
 #!/bin/bash
 
+set -euo pipefail
+
+if [ "${CODESPACES}" = "true" ]; then
+    sudo apt install -yqq stow
+fi
+
 stow -t ~/bin bin
 stow ruby
 stow shell
