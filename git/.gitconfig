@@ -38,9 +38,6 @@
 #	diff = diff-highlight | less
 #[interactive]
 #	diffFilter = diff-highlight
-[commit]
-  template = ~/.gitmessage
-	#gpgSign = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -55,3 +52,6 @@
 	pager = diff-so-fancy | less --tabs=4 -RFX
 [commit]
 	template = ~/.gitmessage
+[init]
+	defaultBranch = main
+
