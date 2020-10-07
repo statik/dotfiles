@@ -173,3 +173,5 @@ fi;
 
 # CodeQL security scanning tools
 export PATH="$PATH":"$HOME/codeql-home/codeql"
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
