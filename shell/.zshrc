@@ -69,7 +69,7 @@ export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
 # android SDK
-export ANDROID_HOME=$HOME/Library/Android/sdk
+export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
 export JAVA_HOME='/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home'
 export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 
@@ -156,7 +156,9 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # this is a hack to get capybara-webkit gem installed on OSX Mojave
 # in order to do some client work on a TOP SECRET THING
 # https://github.com/thoughtbot/capybara-webkit/issues/1072#issuecomment-430311949
-export PATH="/Users/emurphy/Qt5.5.0/5.5/clang_64/bin/:$PATH"
+#export PATH="/Users/emurphy/Qt5.5.0/5.5/clang_64/bin/:$PATH"
+export PATH="/usr/local/opt/Qt/bin:$PATH"
+
 
 # set up direnv
 eval "$(direnv hook zsh)"
