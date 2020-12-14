@@ -1,3 +1,13 @@
+"quick fixes for a more usable vim on a new box in a single line
+" set hls ic is nu noswf
+" these are the same as
+" set hlsearch    " highlight all search results
+" set ignorecase  " do case insensitive search
+" set incsearch   " show incremental search results as you type
+" set number      " display line number
+" set noswapfile  " disable swap file
+" from https://swordandsignals.com/2020/12/13/5-lines-in-vimrc.html`
+
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
@@ -9,6 +19,10 @@ let g:solarized_termtrans = 1 " This gets rid of the grey background
 colorscheme solarized
 set number
 set relativenumber
+set noswapfile
+set incsearch
+set hlsearch
+set ignorecase
 let g:elm_format_autosave=1
 set shiftwidth=2
 set tabstop=2
