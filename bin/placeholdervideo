@@ -18,7 +18,7 @@ Available options:
 -h, --help      Print this help and exit
 -v, --verbose   Print script debug info
 -t, --text      Text to overlay
--l, --leaves    Use alternate verlay image (profile with leaves)
+-l, --leaves    Use alternate overlay image (profile with leaves)
 -s, --silent    Don't add generated seashore audio
 EOF
   exit
