@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# http://k.ylo.ph/2015/11/30/endless-seashore.html
+
+ffplay -f lavfi -i anoisesrc=colour=brown -af tremolo=f=0.1:d=0.9
