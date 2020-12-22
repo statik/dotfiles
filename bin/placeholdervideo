@@ -2,6 +2,8 @@
 
 # nice script boilerplate from https://betterdev.blog/minimal-safe-bash-script-template/
 set -Eeuo pipefail
+
+tempfile=$(mktemp background.XXX)
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 # shellcheck disable=SC2034  # Unused variable left for future convenience
@@ -15,18 +17,20 @@ Generates a test video signal
 
 Available options:
 
--h, --help      Print this help and exit
--v, --verbose   Print script debug info
--t, --text      Text to overlay
--l, --leaves    Use alternate overlay image (profile with leaves)
--s, --silent    Don't add generated seashore audio
+-h, --help       Print this help and exit
+-v, --verbose    Print script debug info
+-t, --text       Text to overlay
+-l, --leaves     Use alternate overlay image (profile with leaves)
+-s, --silent     Don't add generated seashore audio
+-b, --background Background image to use (from file)
+-w, --wave       Add audio waveform overlay
 EOF
   exit
 }
 
 cleanup() {
   trap - SIGINT SIGTERM ERR EXIT
-  # script cleanup here
+  rm -rf "${tempfile}"
 }
 
 setup_colors() {
@@ -57,7 +61,11 @@ parse_params() {
   overlay=${overlay_outline}
   duration="30"
   soundsrc="-i anoisesrc=colour=brown:duration=${duration}"
-  soundfilter=";[0:a] tremolo=f=0.1:d=0.9"
+  soundfilter="[0:a] tremolo=f=0.1:d=0.9;"
+  background=""
+  foreground=""
+  waveform=""
+  waveform_map=""
 
   while :; do
     case "${1-}" in
@@ -76,6 +84,13 @@ parse_params() {
       text=${2-}
       shift
       ;;
+    -b | --background)
+      background="${2-}"
+      shift
+      ;;
+    -w | --waveform)
+      waveform="[vt];[0:a] showwaves=s=1920x120:colors=White:mode=line:[wavevid];[vt][wavevid]overlay=0:960,drawbox=0:960:w=1920:h=120:t=fill:c=black@0.4"
+      ;;
     -?*) die "Unknown option: $1" ;;
     *) break ;;
     esac
@@ -83,6 +98,11 @@ parse_params() {
   done
 
   args=("$@")
+
+  if [[ -z ${foreground} ]]; then
+    echo "${overlay}"|base64 -d > "${tempfile}"
+    foreground=${tempfile}
+  fi
 
   # check required params and arguments
   [[ -z "${text-}" ]] && die "Missing required parameter: --text. Try --text 'VIP Guest 1'"
@@ -104,7 +124,10 @@ setup_colors
 
 fontsize="75"
 text="'${text}'"
-input="testsrc=duration=${duration}:size=1910x1080:rate=30"
+input="-f lavfi -i testsrc=duration=${duration}:size=1910x1080:rate=30"
+if [[ -n "${background}" ]] ; then
+  input="-i ${background}"
+fi
 lowercase="${text,,}"
 nospace="${lowercase// /-}"
 stripleading=${nospace%\'}
@@ -112,6 +135,7 @@ striptrailing=${stripleading#\'}
 normalized=${striptrailing}
 output="generated-${normalized}.mp4"
 
-echo ${overlay} | base64 -d | ffmpeg -loglevel ${loglevel} -f lavfi ${soundsrc} -f lavfi -i "${input}" -i - \
-    -filter_complex "[1:v][2:v] overlay=0:0, drawtext=text=${text}:box=1:boxcolor=black@0.5:boxborderw=30:fontcolor=white@1.0:fontsize=${fontsize}:x=1100:y=h-th-175 ${soundfilter}" \
-    -codec:v libx264 -c:a aac -y "${output}"
+# shellcheck disable=SC2086  # Unquoted variables on purpose 
+ffmpeg -loglevel ${loglevel} -f lavfi ${soundsrc} ${input} -i "${foreground}" \
+    -filter_complex "${soundfilter} [1:v][2:v] overlay=0:0, drawtext=text=${text}:box=1:boxcolor=black@0.6:boxborderw=30:fontcolor=white@1.0:fontsize=${fontsize}:x=1100:y=h-th-175${waveform}" \
+   -codec:v libx264 -codec:a aac -y "${output}"
