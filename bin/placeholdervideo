@@ -89,7 +89,7 @@ parse_params() {
       shift
       ;;
     -w | --waveform)
-      waveform="[vt];[0:a] compand=gain=0,showwaves=s=1920x120:colors=White:mode=line:[wavevid];[vt][wavevid]overlay=0:960,drawbox=0:960:w=1920:h=120:t=fill:c=black@0.4"
+      waveform="[vt];[0:a] aformat=channel_layouts=mono,compand=gain=0,showwaves=s=1920x120:colors=White:mode=line:[wavevid];[vt][wavevid]overlay=0:960,drawbox=0:960:w=1920:h=120:t=fill:c=black@0.4"
       ;;
     -?*) die "Unknown option: $1" ;;
     *) break ;;
