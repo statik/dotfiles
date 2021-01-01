@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+PLUGIN='/Library/Application Support/obs-studio/plugins/media-controls/bin/media-controls.so'
+OLD_PATH_PREFIX='/tmp/obsdeps/lib'
+NEW_PATH_PREFIX='@executable_path/../Frameworks'
+QT_WIDGETS='QtWidgets.framework/Versions/5/QtWidgets'
+QT_GUI='QtGui.framework/Versions/5/QtGui'
+QT_CORE='QtCore.framework/Versions/5/QtCore'
+
+
+if ! otool -l "${PLUGIN}" | grep -q "${OLD_PATH_PREFIX}"; then
+  echo "Old paths not found, nothing to do."
+  exit 0
+fi
+
+echo "Found $OLD_PATH_PREFIX entries inside $PLUGIN, patching"
+
+install_name_tool \
+  -change "${OLD_PATH_PREFIX}/${QT_WIDGETS}" "${NEW_PATH_PREFIX}/${QT_WIDGETS}" \
+  -change "${OLD_PATH_PREFIX}/${QT_GUI}" "${NEW_PATH_PREFIX}/${QT_GUI}" \
+  -change "${OLD_PATH_PREFIX}/${QT_CORE}" "${NEW_PATH_PREFIX}/${QT_CORE}" \
+  "${PLUGIN}"
