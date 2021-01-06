@@ -20,7 +20,9 @@
   newNormal = "green bold"
   newHighlight = "green bold 22"
 [push]
-	default = nothing
+  default = nothing
+[pull]
+  rebase = true
 [color "branch"]
   current = yellow reverse
   local = yellow
