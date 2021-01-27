@@ -45,7 +45,7 @@ elif [[ $platform == 'osx' ]]; then
   #export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
   #export PATH=$PATH:~/apache-maven-3.5.0/bin
   # python3 user path (for stuff installed with pip install --user)
-  export PATH=$PATH:/Users/emurphy/Library/Python/3.7/bin
+  export PATH=$PATH:/Users/emurphy/Library/Python/3.9/bin
   # Postgres.app path
   export PATH=/Applications/Postgres.app/Contents/Versions/10/bin:$PATH
 fi
