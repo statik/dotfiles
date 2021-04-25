@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+exec docker run -t --volume "$(pwd)":/docs -w /docs ghcr.io/kindlyops/reporter:v1.1.0 "$@"
