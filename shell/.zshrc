@@ -48,6 +48,15 @@ elif [[ $platform == 'osx' ]]; then
   export PATH=$PATH:/Users/emurphy/Library/Python/3.9/bin
   # Postgres.app path
   export PATH=/Applications/Postgres.app/Contents/Versions/10/bin:$PATH
+
+  # these next settings are so that Xcode 12.4 can find homebrew SSL
+  # when compiling python3 psycopg2-binary package
+  # https://github.com/psycopg/psycopg2/issues/1200
+  #For compilers to find openssl@1.1 you may need to set:
+  export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+  export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+  #For pkg-config to find openssl@1.1 you may need to set:
+  # export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
 fi
 
 # used for the HavenGRC deployment of helm/tiller on OpenShift
@@ -177,3 +186,5 @@ fi;
 export PATH="$PATH":"$HOME/codeql-home/codeql"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+. /usr/local/opt/asdf/asdf.sh
