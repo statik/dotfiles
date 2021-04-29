@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eo pipefail
 
 if [ "${CODESPACES}" = "true" ]; then
     sudo apt install -yqq stow
