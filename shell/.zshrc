@@ -87,6 +87,14 @@ if [[ -f "$HOME/.rbenv/version" ]]; then
   eval "$(rbenv init -)"
 fi
 
+if [[ -x $(command -v pyenv) ]]; then
+  echo "Loading pyenv"
+  export PATH="$HOME/.pyenv/bin:$PATH"
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+else
+  echo "not loading pyenv"
+fi
 
 # nix package manager
 if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
