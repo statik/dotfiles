@@ -1,4 +1,4 @@
-!#/usr/bin/env bash
+#!/usr/bin/env bash
 
 codesign --remove-signature /Applications/zoom.us.app/
 

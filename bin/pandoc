@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo DEBUG pandoc $* >> pandoc-debug.log
+
+exec /usr/local/bin/pandoc "$@"
