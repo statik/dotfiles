@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+USAGE='watchdns'
+DESCRIPTION='
+
+  Uses tshark to watch port 53 udp traffic
+
+  Dependencies: requires tshark to be installed.
+'
+
+
+function usage() {
+  echo "$USAGE" "$DESCRIPTION" >&2
+}
+
+type tshark >/dev/null 2>&1 || {
+  echo >&2 "Error: tshark must be installed (try hey siri install a shark)"
+  usage
+  exit 1
+}
+
+[ $# -ge 0 ] || {
+  usage
+  exit 1
+}
+
+unamestr=$(uname)
+if [[ "$unamestr" == 'Linux' ]]; then
+   platform='linux'
+   interface=$(route | grep default | awk '{print $8}')
+elif [[ "$unamestr" == 'Darwin' ]]; then
+   platform='osx'
+   interface=$(route get default | grep interface | awk '{print $2}')
+fi
+
+tshark -i "$interface" -n src port 53
