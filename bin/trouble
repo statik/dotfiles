@@ -109,6 +109,13 @@ define MESSAGE<<EOF
 9.  ${bold}${green}sar -n TCP,ETCP 1${reset} TCP statistics: connection rates, retransmits.
 10. ${bold}${green}top${reset} Check overview
 
+${bold}${blue}OTHER${reset}
+0. See network interfaces ${green}ip link show${reset}|${green}ip addr show${reset}
+1. watch DNS traffic for an interface ${green}tshark -i en8 -n src port 53${reset}
+2. consider tcpflow vs tshark when needing to analyze a particular payload rather
+   than a connection, data stream reconstruction can be more useful than per-packet
+3. consider ${green}ngrep${reset}
+
 EOF
 setup_colors
 msg "$MESSAGE\n"
