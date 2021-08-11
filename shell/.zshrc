@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 #
 # Executes commands at the start of an interactive session.
 #
@@ -38,7 +45,8 @@ export GO15VENDOREXPERIMENT=1
 if [[ $platform == 'linux' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
   #export PATH=$PATH:/usr/lib/go-1.10/bin
-	alias open=xdg-open
+  alias open=xdg-open
+  source /home/emurphy/.linuxbrew/opt/asdf/libexec/asdf.sh
 elif [[ $platform == 'osx' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
   # maven 3. what have I done with my life?
@@ -75,7 +83,7 @@ test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew
 
 # dat node version manager
 export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
+#source $(brew --prefix nvm)/nvm.sh
 
 # android SDK
 export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
@@ -93,7 +101,7 @@ if [[ -x $(command -v pyenv) ]]; then
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 else
-  echo "not loading pyenv"
+  # echo "not loading pyenv"
 fi
 
 # nix package manager
@@ -154,7 +162,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export GPG_TTY=$(tty)
 
 if [[ $(hostname) == "havendev" ]]; then
-	echo "HAVENDEV"
+	#echo "HAVENDEV"
 	#tmux has-session && exec tmux attach || exec tmux
 else
 	echo "not tmuxing"
@@ -195,4 +203,5 @@ export PATH="$PATH":"$HOME/codeql-home/codeql"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-. /usr/local/opt/asdf/asdf.sh
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
