@@ -20,7 +20,7 @@
   newNormal = "green bold"
   newHighlight = "green bold 22"
 [push]
-  default = nothing
+	default = simple
 [pull]
   rebase = true
 [color "branch"]
@@ -29,8 +29,8 @@
 [merge]
 	tool = opendiff
 [user]
-  name = Elliot Murphy
-  email = statik@users.noreply.github.com
+	name = "Elliot Murphy"
+	useConfigOnly = true
 
 [diff]
 	compactionHeuristic = true
@@ -52,8 +52,12 @@
 [core]
 	excludesfile = /Users/emurphy/.gitignore
 	pager = diff-so-fancy | less --tabs=4 -RFX
+	autocrlf = false
+	editor = vim
 [commit]
 	template = ~/.gitmessage
 [init]
 	defaultBranch = main
 
+[status]
+	submoduleSummary = true

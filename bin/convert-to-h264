@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+USAGE='convert-to-prores inputfile [outputfile] [h.246 setting 1 to 5, default 1]'
+DESCRIPTION='
+
+  Converts a video file to h.264 for playback on HyperDeck or NLE
+
+  The outputfile is optional, if not provided it will be based on the input file name
+  The profile switch takes an integer from -1 to 5 to match the ProRes profiles
+  Default is 1, lt 422
+    -1 auto (default)
+     0 proxy    = 45Mbps YUV 4:2:2
+     1 lt       = 102Mbps YUV 4:2:2
+     2 std      = 147mpbs YUV 4:2:2
+     3 hq       = 220 Mbps YUV 4:2:2
+     4 4444     = 330Mbps YUVA 4:4:4:4
+     5 4444xq   = 500Mbps YUVA 4:4:4:4
+
+  Audio is defaulted to pcm_s16le.
+
+  Dependencies: requires ffmpeg command to be installed.
+'
+
+
+function usage() {
+	echo "$USAGE" "$DESCRIPTION" >&2
+}
+
+type ffmpeg >/dev/null 2>&1 || {
+	echo >&2 "Error: ffmpeg cli must be installed. Aborting."
+	usage
+	exit 1
+}
+
+[ $# -ge 1 ] || {
+	usage
+	exit 1
+}
+
+input="$1"
+output="${2:-${1}.converted.mp4}"
+profile="${3:-1}"
+
+echo "Converting from: $input to: $output"
+
+ffmpeg -i "$input" -c:v  -profile:v "$profile" -c:a pcm_s16le -f s16le -ac 2 -ar 16000 "$output"
+
+# ffmpeg -i output-audio.wav -s 1920x1080 -i input.yuv -r 24 -pix_fmt yuv422p10le -shortest -c:v v210 -c:a copy ouput.mov

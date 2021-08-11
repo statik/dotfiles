@@ -65,6 +65,11 @@ elif [[ $platform == 'osx' ]]; then
   export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
   #For pkg-config to find openssl@1.1 you may need to set:
   # export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
+  # Added by Amplify CLI binary installer
+  export PATH="$HOME/.amplify/bin:$PATH"
+
+  # Add homebrew bin directories to PATH.
+  export PATH="$HOME/.homebrew/bin:$HOME/.homebrew/sbin:$PATH"
 fi
 
 # used for the HavenGRC deployment of helm/tiller on OpenShift
@@ -205,3 +210,4 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
