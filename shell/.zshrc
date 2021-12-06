@@ -5,12 +5,16 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+source /Users/emurphy/.homebrew/opt/gitstatus/gitstatus.prompt.zsh
+
 #
 # Executes commands at the start of an interactive session.
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
+
+
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
@@ -27,7 +31,7 @@ ENABLE_CORRECTION="false"
 HIST_STAMPS="yyyy-mm-dd"
 HIST_IGNORE_SPACE="true"
 
-# should not be needed with modern go 
+# should not be needed with modern go
 #launchctl setenv GOPATH $HOME/go
 #
 #
@@ -46,14 +50,16 @@ if [[ $platform == 'linux' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
   #export PATH=$PATH:/usr/lib/go-1.10/bin
   alias open=xdg-open
-  source /home/emurphy/.linuxbrew/opt/asdf/libexec/asdf.sh
+  #source /home/emurphy/.linuxbrew/opt/asdf/libexec/asdf.sh
+  # test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+  # export PATH="/home/emurphy/.linuxbrew/bin:$PATH"
 elif [[ $platform == 'osx' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
   # maven 3. what have I done with my life?
   #export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
   #export PATH=$PATH:~/apache-maven-3.5.0/bin
   # python3 user path (for stuff installed with pip install --user)
-  export PATH=$PATH:/Users/emurphy/Library/Python/3.9/bin
+  export PATH=$PATH:/Users/emurphy/.homebrew/bin/python3.9
   # Postgres.app path
   export PATH=/Applications/Postgres.app/Contents/Versions/10/bin:$PATH
 
@@ -84,10 +90,11 @@ source ~/.private
 export EDITOR=vim
 export VISUAL=vim
 
-test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-
 # dat node version manager
-export NVM_DIR=~/.nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 #source $(brew --prefix nvm)/nvm.sh
 
 # android SDK
@@ -108,6 +115,12 @@ if [[ -x $(command -v pyenv) ]]; then
 else
   # echo "not loading pyenv"
 fi
+
+PY3_USER_BASE_PATH=$(python3 -m site --user-base)
+export PATH=$PATH:$PY3_USER_BASE_PATH/bin
+
+USER_BASE_PATH=$(python -m site --user-base)
+export PATH=$PATH:$USER_BASE_PATH/bin
 
 # nix package manager
 if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
@@ -131,10 +144,6 @@ export PGHOST=localhost
 
 
 
-# z, jump around
-# TODO make this conditional
-#. /usr/local/etc/profile.d/z.sh
-
 
 # added by travis gem
 #[ -f /Users/emurphy/.travis/travis.sh ] && source /Users/emurphy/.travis/travis.sh
@@ -145,7 +154,23 @@ export PGHOST=localhost
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/emurphy/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/emurphy/google-cloud-sdk/completion.zsh.inc'; fi
 
-export PATH="/home/emurphy/.linuxbrew/bin:$PATH"
+
+#
+if [ -d "$HOME/bin" ]; then
+  PATH="$HOME/bin:$PATH"
+fi
+
+if [ -d "$HOME/.local/bin" ]; then
+  PATH="$HOME/.local/bin:$PATH"
+fi
+# emurphy - use gnu sed
+PATH="$HOME/.homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
+# use gnu xargs
+PATH="$HOME/.homebrew/opt/findutils/libexec/gnubin:$PATH"
+# make cargo installed binaries like agrind available
+PATH="$HOME/.cargo/bin:$PATH"
+# make go installed binaries like fm available
+PATH="$HOME/go/bin:$PATH"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -158,10 +183,11 @@ if [ -f '/usr/local/bin/virtualenvwrapper.sh' ]; then source /usr/local/bin/virt
 
 # fasd https://github.com/clvv/fasd
 # inspired by autojump and Z
-eval "$(fasd --init auto)"
+# eval "$(fasd --init auto)"
+# switch to zoxide
+# emurphy added zoxide
+eval "$(zoxide init zsh)"
 
-# rust path
-export PATH="$HOME/.cargo/bin:$PATH"
 
 # Added by Krypton
 export GPG_TTY=$(tty)
@@ -170,11 +196,8 @@ if [[ $(hostname) == "havendev" ]]; then
 	#echo "HAVENDEV"
 	#tmux has-session && exec tmux attach || exec tmux
 else
-	echo "not tmuxing"
+	# echo "not tmuxing"
 fi
-
-USER_BASE_PATH=$(python -m site --user-base)
-export PATH=$PATH:$USER_BASE_PATH/bin
 
 # tweak fzf fuzzy finder to ignore some directories
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!{.git,vendor,bazel-bin,bazel-out}/*"'
@@ -189,25 +212,41 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 #export PATH="/Users/emurphy/Qt5.5.0/5.5/clang_64/bin/:$PATH"
 export PATH="/usr/local/opt/Qt/bin:$PATH"
 
+# ks3up / k3s cluster
+# Test your cluster with:
+export KUBECONFIG=/Users/emurphy/kubeconfig
 
 # set up direnv
 eval "$(direnv hook zsh)"
 
 # announce if working in aws-shell
-if [ -n "${AWS_VAULT}" ] ; then
-    echo -e "$(tput setab 1)WARNING: working in aws-vault env ${AWS_VAULT}$(tput sgr0)"
-    export PS1="$(tput setab 5)<<${AWS_VAULT}>>$(tput sgr0) ${PS1}";
-fi;
+# if [ -n "${AWS_VAULT}" ] ; then
+#     echo -e "$(tput setab 1)WARNING: working in aws-vault env ${AWS_VAULT}$(tput sgr0)"
+#     export PS1="$(tput setab 5)<<${AWS_VAULT}>>$(tput sgr0) ${PS1}";
+# fi;
 
 # make aws vault login last longer than 15 minutes
 # export AWS_ASSUME_ROLE_TTL=60m
 #
+function prompt_aws_vault() {
+  if [ -n "${AWS_VAULT}" ] ; then
+    #echo -e "$(tput setab 1)WARNING: working in aws-vault env ${AWS_VAULT}$(tput sgr0)"
+    #export PS1="$(tput setab 5)<<${AWS_VAULT}>>$(tput sgr0) ${PS1}";
+    # p10k
+    p10k segment -b 1 -f 3 -i '☁️' -t "${AWS_VAULT}"
+  fi;
+}
 
 # CodeQL security scanning tools
 export PATH="$PATH":"$HOME/codeql-home/codeql"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export YOKE_DIR=/Users/emurphy/.yoke
+fpath+=(~/.yoke/configs/completions)
 
+autoload -U compinit
+compinit
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+source ~/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
