@@ -36,3 +36,5 @@ alias ungron="gron --ungron"
 alias bcdk="bazel run //infra:cdk --"
 alias bcdk2="bazel run //infra:cdk2 --"
 alias bcdk3="bazel run //infra:cdk3 --"
+
+alias k=kubectl
