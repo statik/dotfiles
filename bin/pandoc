@@ -2,4 +2,4 @@
 
 echo DEBUG pandoc $* >> pandoc-debug.log
 
-exec /usr/local/bin/pandoc "$@"
+exec /Users/emurphy/.homebrew/bin/pandoc "$@"
