@@ -83,9 +83,9 @@ fi
 export TILLER_NAMESPACE=haven-tiller
 
 
-source ~/.aliases
-source ~/.functions
-source ~/.private
+test -e ~/.aliases && source ~/.aliases
+test -e ~/.functions && source ~/.functions
+test - ~/.private && source ~/.private
 
 export EDITOR=vim
 export VISUAL=vim
