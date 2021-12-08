@@ -5,7 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-source /Users/emurphy/.homebrew/opt/gitstatus/gitstatus.prompt.zsh
 
 #
 # Executes commands at the start of an interactive session.
@@ -44,22 +43,33 @@ elif [[ "$unamestr" == 'Darwin' ]]; then
    platform='osx'
 fi
 
+# initialize homebrew accounting for different locations
+if [[ -f $HOME/.homebrew/bin/brew ]]; then
+	eval $($HOME/.homebrew/bin/brew shellenv)
+elif [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+	eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+else
+	echo "Could not find homebrew/linuxbrew, FIXME"
+fi
+
 export GOPATH=$HOME/go
 export GO15VENDOREXPERIMENT=1
+export BREWPATH=$(brew --prefix)
 if [[ $platform == 'linux' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
   #export PATH=$PATH:/usr/lib/go-1.10/bin
   alias open=xdg-open
-  #source /home/emurphy/.linuxbrew/opt/asdf/libexec/asdf.sh
-  # test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-  # export PATH="/home/emurphy/.linuxbrew/bin:$PATH"
+  test -d $BREWPATH && eval $($BREWPATH/bin/brew shellenv)
+  export PATH="$BREWPATH/bin:$PATH"
+  # aws vault on linux use file backend
+  export AWS_VAULT_BACKEND=file
 elif [[ $platform == 'osx' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
   # maven 3. what have I done with my life?
   #export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
   #export PATH=$PATH:~/apache-maven-3.5.0/bin
   # python3 user path (for stuff installed with pip install --user)
-  export PATH=$PATH:/Users/emurphy/.homebrew/bin/python3.9
+  export PATH=$PATH:$BREWPATH/bin/python3.9
   # Postgres.app path
   export PATH=/Applications/Postgres.app/Contents/Versions/10/bin:$PATH
 
@@ -75,8 +85,14 @@ elif [[ $platform == 'osx' ]]; then
   export PATH="$HOME/.amplify/bin:$PATH"
 
   # Add homebrew bin directories to PATH.
-  export PATH="$HOME/.homebrew/bin:$HOME/.homebrew/sbin:$PATH"
+  export PATH="$BREWPATH/bin:$BREWPATH/sbin:$PATH"
+  # emurphy - use gnu sed
+  export PATH="$BREWPATH/opt/gnu-sed/libexec/gnubin:$PATH"
+  # use gnu xargs
+  export PATH="$BREWPATH/opt/findutils/libexec/gnubin:$PATH"
 fi
+
+#source $BREWPATH/opt/gitstatus/gitstatus.prompt.zsh
 
 # used for the HavenGRC deployment of helm/tiller on OpenShift
 # project is named haven-tiller
@@ -85,7 +101,7 @@ export TILLER_NAMESPACE=haven-tiller
 
 test -e ~/.aliases && source ~/.aliases
 test -e ~/.functions && source ~/.functions
-test - ~/.private && source ~/.private
+test -e ~/.private && source ~/.private
 
 export EDITOR=vim
 export VISUAL=vim
@@ -108,7 +124,7 @@ if [[ -f "$HOME/.rbenv/version" ]]; then
 fi
 
 if [[ -x $(command -v pyenv) ]]; then
-  echo "Loading pyenv"
+  #echo "Loading pyenv"
   export PATH="$HOME/.pyenv/bin:$PATH"
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
@@ -163,10 +179,6 @@ fi
 if [ -d "$HOME/.local/bin" ]; then
   PATH="$HOME/.local/bin:$PATH"
 fi
-# emurphy - use gnu sed
-PATH="$HOME/.homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
-# use gnu xargs
-PATH="$HOME/.homebrew/opt/findutils/libexec/gnubin:$PATH"
 # make cargo installed binaries like agrind available
 PATH="$HOME/.cargo/bin:$PATH"
 # make go installed binaries like fm available
@@ -241,12 +253,13 @@ function prompt_aws_vault() {
 export PATH="$PATH":"$HOME/codeql-home/codeql"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-export YOKE_DIR=/Users/emurphy/.yoke
-fpath+=(~/.yoke/configs/completions)
 
 autoload -U compinit
 compinit
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 source ~/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+fpath+=(~/.yoke/configs/completions)
+export YOKE_DIR=$HOME/.yoke
 
