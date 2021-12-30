@@ -67,6 +67,10 @@ elif [[ $platform == 'osx' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
   # maven 3. what have I done with my life?
   #export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_131.jdk/Contents/Home
+  # android SDK
+  export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
+  export JAVA_HOME='/Applications/Android Studio.app/Contents/jre/Contents/Home'
+  export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
   #export PATH=$PATH:~/apache-maven-3.5.0/bin
   # python3 user path (for stuff installed with pip install --user)
   export PATH=$PATH:$BREWPATH/bin/python3.9
@@ -77,10 +81,12 @@ elif [[ $platform == 'osx' ]]; then
   # when compiling python3 psycopg2-binary package
   # https://github.com/psycopg/psycopg2/issues/1200
   #For compilers to find openssl@1.1 you may need to set:
-  export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
-  export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+  #export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+  #export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+  
   #For pkg-config to find openssl@1.1 you may need to set:
   # export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
+  
   # Added by Amplify CLI binary installer
   export PATH="$HOME/.amplify/bin:$PATH"
 
@@ -113,10 +119,6 @@ export NVM_DIR="$HOME/.nvm"
 
 #source $(brew --prefix nvm)/nvm.sh
 
-# android SDK
-export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
-export JAVA_HOME='/Applications/Android Studio.app/Contents/jre/jdk/Contents/Home'
-export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 
 if [[ -f "$HOME/.rbenv/version" ]]; then
   # dat ruby
@@ -248,6 +250,9 @@ function prompt_aws_vault() {
     p10k segment -b 1 -f 3 -i '☁️' -t "${AWS_VAULT}"
   fi;
 }
+
+# ripgrep config
+export RIPGREP_CONFIG_PATH=~/.ripgreprc
 
 # CodeQL security scanning tools
 export PATH="$PATH":"$HOME/codeql-home/codeql"

@@ -27,13 +27,36 @@
   current = yellow reverse
   local = yellow
 [merge]
-	tool = opendiff
+  conflictstyle = diff3
+  tool = opendiff
 [user]
 	name = "Elliot Murphy"
 	useConfigOnly = true
 
 [diff]
-	compactionHeuristic = true
+  compactionHeuristic = true
+  colorMoved = default
+
+[interactive]
+    diffFilter = delta --color-only --features=interactive
+
+[delta]
+  features = decorations
+  navigate = true
+  side-by-side = true
+
+[delta "interactive"]
+    keep-plus-minus-markers = false
+
+[delta "decorations"]
+    commit-decoration-style = blue ol
+    commit-style = raw
+    file-style = omit
+    hunk-header-decoration-style = blue box
+    hunk-header-file-style = red
+    hunk-header-line-number-style = "#067a00"
+    hunk-header-style = file line-number syntax
+
 #[pager]
 #	log = diff-highlight | less
 #	show = diff-highlight | less
@@ -51,7 +74,8 @@
 	forceSignAnnotated = true
 [core]
 	excludesfile = /Users/emurphy/.gitignore
-	pager = diff-so-fancy | less --tabs=4 -RFX
+	pager = delta
+#	pager = diff-so-fancy | less --tabs=4 -RFX
 	autocrlf = false
 	editor = vim
 [commit]
@@ -61,3 +85,5 @@
 
 [status]
 	submoduleSummary = true
+[icdiff]
+	options = --line-numbers
