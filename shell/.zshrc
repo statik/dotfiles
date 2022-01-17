@@ -14,12 +14,6 @@ fi
 #
 
 
-
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
-
 # Customize to your needs...
 
 setopt MENU_COMPLETE
@@ -96,8 +90,30 @@ elif [[ $platform == 'osx' ]]; then
   export PATH="$BREWPATH/opt/gnu-sed/libexec/gnubin:$PATH"
   # use gnu xargs
   export PATH="$BREWPATH/opt/findutils/libexec/gnubin:$PATH"
+
+  # fortran stuff for compiling R on m1
+  # https://mac.r-project.org/tools/
+  export PATH=$PATH:/opt/R/arm64/gfortran/bin
 fi
 
+export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
+if [[ -x $(command -v pyenv) ]]; then
+  #echo "Loading pyenv"
+  #export PATH="$HOME/.pyenv/bin:$PATH"
+  eval "$(pyenv init --path)"
+  eval "$(pyenv virtualenv-init -)"
+else
+  # echo "not loading pyenv"
+fi
+
+#PY3_USER_BASE_PATH=$(python3 -m site --user-base)
+#export PATH=$PATH:$PY3_USER_BASE_PATH/bin
+
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
 #source $BREWPATH/opt/gitstatus/gitstatus.prompt.zsh
 
 # used for the HavenGRC deployment of helm/tiller on OpenShift
@@ -125,20 +141,6 @@ if [[ -f "$HOME/.rbenv/version" ]]; then
   eval "$(rbenv init -)"
 fi
 
-if [[ -x $(command -v pyenv) ]]; then
-  #echo "Loading pyenv"
-  export PATH="$HOME/.pyenv/bin:$PATH"
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-else
-  # echo "not loading pyenv"
-fi
-
-PY3_USER_BASE_PATH=$(python3 -m site --user-base)
-export PATH=$PATH:$PY3_USER_BASE_PATH/bin
-
-USER_BASE_PATH=$(python -m site --user-base)
-export PATH=$PATH:$USER_BASE_PATH/bin
 
 # nix package manager
 if [[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
@@ -265,6 +267,4 @@ compinit
 source ~/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-fpath+=(~/.yoke/configs/completions)
-export YOKE_DIR=$HOME/.yoke
 

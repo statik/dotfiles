@@ -36,6 +36,7 @@ zstyle ':prezto:load' pmodule \
   'prompt' \
   'git'
 
+zstyle ':prezto:module:python' skip-virtualenvwrapper-init 'on'
 #
 # Editor
 #
@@ -132,6 +133,10 @@ zstyle ':prezto:module:syntax-highlighting' highlighters \
   'brackets' \
   'pattern' \
   'root'
+
+# %v - virtualenv name.
+zstyle ':prezto:module:python:info:virtualenv' format 'virtualenv:%v'
+
 #
 # Set syntax highlighting styles.
 # zstyle ':prezto:module:syntax-highlighting' styles \
