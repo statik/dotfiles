@@ -30,8 +30,9 @@
   conflictstyle = diff3
   tool = opendiff
 [user]
-	name = "Elliot Murphy"
+	name = Elliot Murphy
 	useConfigOnly = true
+	email = statik@users.noreply.github.com
 
 [diff]
   compactionHeuristic = true

@@ -94,6 +94,9 @@ elif [[ $platform == 'osx' ]]; then
   # fortran stuff for compiling R on m1
   # https://mac.r-project.org/tools/
   export PATH=$PATH:/opt/R/arm64/gfortran/bin
+
+
+  export PATH="/Users/emurphy/.homebrew/opt/qt@5/bin:$PATH"
 fi
 
 export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
