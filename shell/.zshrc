@@ -40,6 +40,8 @@ fi
 # initialize homebrew accounting for different locations
 if [[ -f $HOME/.homebrew/bin/brew ]]; then
 	eval $($HOME/.homebrew/bin/brew shellenv)
+elif [[ -f /opt/homebrew/bin/brew ]]; then
+	eval $(/opt/homebrew/bin/brew shellenv)
 elif [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]; then
 	eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 else
@@ -271,3 +273,6 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
+
+# Secretive Config
+export SSH_AUTH_SOCK=/Users/emurphy/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
