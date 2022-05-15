@@ -1,3 +1,5 @@
+# Fig pre block. Keep at the top of this file.
+. "$HOME/.fig/shell/zshrc.pre.zsh"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -50,6 +52,7 @@ fi
 
 export GOPATH=$HOME/go
 export GO15VENDOREXPERIMENT=1
+
 export BREWPATH=$(brew --prefix)
 if [[ $platform == 'linux' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:$HOME/.local/bin
@@ -132,6 +135,7 @@ test -e ~/.private && source ~/.private
 
 export EDITOR=vim
 export VISUAL=vim
+bindkey -e # make ctrl-a and ctrl-e work for line nav
 
 # dat node version manager
 export NVM_DIR="$HOME/.nvm"
@@ -274,5 +278,9 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 
 
-# Secretive Config
-export SSH_AUTH_SOCK=/Users/emurphy/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+if [[ $platform == 'linux' ]]; then
+  # Secretive Config
+  export SSH_AUTH_SOCK=/Users/emurphy/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+fi
+# Fig post block. Keep at the bottom of this file.
+. "$HOME/.fig/shell/zshrc.post.zsh"

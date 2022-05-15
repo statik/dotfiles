@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
-echo DEBUG pandoc $* >> pandoc-debug.log
+#echo DEBUG pandoc $* >> pandoc-debug.log
 
 exec /Users/emurphy/.homebrew/bin/pandoc "$@"
+exec pandoc "$@"

@@ -46,6 +46,7 @@ OUTPUT="${2:-${BASE}-tinted.${SUFFIX}}"
 # tint it!
 KINDLYOPS_PRIMARY_GREEN="rgba(47, 160, 157, 1)"
 NICE_BLUE="rgba(59, 88, 150, 1)"
+ACADEMY_BEIGE="rgba(244, 239, 235, 1)"
 # KINDLYOPS_PRIMARY_RED="rgba(232, 105, 83, 1)"
 
-sharp tint "$KINDLYOPS_PRIMARY_GREEN" -i "$FILENAME" -o "$OUTPUT"
+sharp tint "$ACADEMY_BEIGE" -i "$FILENAME" -o "$OUTPUT"

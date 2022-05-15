@@ -15,6 +15,9 @@ alias bt='wget http://cachefly.cachefly.net/100mb.test -O /dev/null'
 alias dig='dig +short +noshort'
 
 alias la="exa -abghl --git --color=automatic"
+alias l="exa -l --color=automatic"
+alias ls="exa -l --color=automatic --git"
+alias tree="exa -l --tree --git"
 
 
 # some helpers for ssh tunnel proxies from
