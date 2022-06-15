@@ -239,7 +239,7 @@ export PATH="/usr/local/opt/Qt/bin:$PATH"
 
 # ks3up / k3s cluster
 # Test your cluster with:
-export KUBECONFIG=/Users/emurphy/kubeconfig
+#export KUBECONFIG=/Users/emurphy/kubeconfig
 
 # set up direnv
 eval "$(direnv hook zsh)"
@@ -278,9 +278,13 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 
 
-if [[ $platform == 'linux' ]]; then
+if [[ $platform == 'osx' ]]; then
   # Secretive Config
   export SSH_AUTH_SOCK=/Users/emurphy/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
 fi
 # Fig post block. Keep at the bottom of this file.
 . "$HOME/.fig/shell/zshrc.post.zsh"
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/Users/emurphy/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
