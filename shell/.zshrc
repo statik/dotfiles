@@ -45,9 +45,13 @@ if [[ -f $HOME/.homebrew/bin/brew ]]; then
 elif [[ -f /opt/homebrew/bin/brew ]]; then
 	eval $(/opt/homebrew/bin/brew shellenv)
 elif [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]; then
-	eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 else
-	echo "Could not find homebrew/linuxbrew, FIXME"
+    echo "Could not find homebrew/linuxbrew, FIXME"
+fi
+
+if [[ -f $HOME/.config.sops/age/keys.txt ]]; then
+    export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
 fi
 
 export GOPATH=$HOME/go
