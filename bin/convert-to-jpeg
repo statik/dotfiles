@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+USAGE='convert-to-jpeg <inputfiles>'
+DESCRIPTION='
+
+  Converts an image file to jpeg using ImageMagick
+
+  Dependencies: requires ImageMagic convert command to be installed.
+'
+
+function usage() {
+  echo "$USAGE" "$DESCRIPTION" >&2
+}
+
+type convert >/dev/null 2>&1 || {
+  echo >&2 "Error: ImageMagick convert cli must be installed. Aborting."
+  usage
+  exit 1
+}
+
+[ $# -ge 1 ] || {
+  usage
+  exit 1
+}
+
+for input in "$@"; do
+  output="${input%.*}.jpeg"
+
+  echo "Converting from: $input to: $output"
+  convert $input $output
+done
