@@ -1,5 +1,3 @@
-# Fig pre block. Keep at the top of this file.
-[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && . "$HOME/.fig/shell/zshrc.pre.zsh"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -115,7 +113,7 @@ if [[ -x $(command -v pyenv) ]]; then
   eval "$(pyenv init --path)"
   eval "$(pyenv virtualenv-init -)"
 else
-  # echo "not loading pyenv"
+  echo "not loading pyenv"
 fi
 
 #PY3_USER_BASE_PATH=$(python3 -m site --user-base)
@@ -290,5 +288,11 @@ fi
 export PATH="/Users/emurphy/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && . "$HOME/.fig/shell/zshrc.post.zsh"
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+path=("$HOME/.julia/juliaup/bin" $path)
+export PATH
+
+# <<< juliaup initialize <<<
