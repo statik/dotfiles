@@ -182,9 +182,6 @@ export PGHOST=localhost
 # The next line updates PATH for the Google Cloud SDK.
 #if [ -f '/Users/emurphy/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/emurphy/google-cloud-sdk/path.zsh.inc'; fi
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/emurphy/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/emurphy/google-cloud-sdk/completion.zsh.inc'; fi
-
 
 #
 if [ -d "$HOME/bin" ]; then
@@ -296,3 +293,9 @@ path=("$HOME/.julia/juliaup/bin" $path)
 export PATH
 
 # <<< juliaup initialize <<<
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/emurphy/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/emurphy/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/emurphy/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/emurphy/google-cloud-sdk/completion.zsh.inc'; fi
