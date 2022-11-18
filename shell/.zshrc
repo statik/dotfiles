@@ -182,17 +182,6 @@ function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
 #export PATH=$PATH:/usr/local/pgsql/bin
 export PGHOST=localhost
 
-
-
-
-# added by travis gem
-#[ -f /Users/emurphy/.travis/travis.sh ] && source /Users/emurphy/.travis/travis.sh
-
-# The next line updates PATH for the Google Cloud SDK.
-#if [ -f '/Users/emurphy/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/emurphy/google-cloud-sdk/path.zsh.inc'; fi
-
-
-#
 if [ -d "$HOME/bin" ]; then
   PATH="$HOME/bin:$PATH"
 fi
@@ -298,7 +287,7 @@ export PATH
 # <<< juliaup initialize <<<
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/emurphy/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/emurphy/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/emurphy/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/emurphy/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
