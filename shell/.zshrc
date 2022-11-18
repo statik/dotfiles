@@ -1,3 +1,12 @@
+# tmux must be before powerlevel10k instant prompt
+
+if [[ $(hostname) == "havendev" ]]; then
+  if [ -z $TMUX ]; then
+    exec tmux new-session -A -s workspace
+  fi
+fi
+
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -216,12 +225,6 @@ eval "$(zoxide init zsh)"
 # Added by Krypton
 export GPG_TTY=$(tty)
 
-if [[ $(hostname) == "havendev" ]]; then
-	#echo "HAVENDEV"
-	#tmux has-session && exec tmux attach || exec tmux
-else
-	# echo "not tmuxing"
-fi
 
 # tweak fzf fuzzy finder to ignore some directories
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!{.git,vendor,bazel-bin,bazel-out}/*"'
