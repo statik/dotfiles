@@ -2,6 +2,9 @@
 alias setdns='networksetup -setdnsservers Wi-Fi'
 alias getdns='networksetup -getdnsservers Wi-Fi'
 
+# if nvim is available prefer that
+type nvim &>/dev/null && alias vim='nvim'
+
 alias dockercleanup='docker rmi -f $(docker images -q --filter "dangling=true")'
 alias git_delete_merged_branches='git branch --merged | grep -v "\*" | xargs -n 1 git branch -d'
 
