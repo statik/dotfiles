@@ -1,7 +1,7 @@
 # tmux must be before powerlevel10k instant prompt
 
 if [[ $(hostname) == "havendev" ]]; then
-  if [ -z $TMUX ]; then
+  if [ -z $TMUX ] && [ -z $RSTUDIO ]; then
     exec tmux new-session -A -s workspace
   fi
 fi
