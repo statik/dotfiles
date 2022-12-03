@@ -3,10 +3,11 @@
 # This will create a 5 second long mp4 file using the provided font, text and image with a fade in and out effect.
 _dur=5
 _framerate=30
-_fontfile="$HOME/bin/Roboto-Bold.ttf"
+#_fontfile="$HOME/bin/fonts/Roboto-Bold.ttf"
+_fontfile="$HOME/bin/fonts/OpenSans-Medium.ttf"
 _fontsize=30
 _fontcolor='white'
-_text='Hyperdeck Testing'
+_text='This is a message'
 _background_color='black'
 _drawtext="fontfile=${_fontfile}:fontsize=${_fontsize}"
 _fade="fade=in:0:25,fade=out:50:60"

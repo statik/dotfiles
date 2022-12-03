@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+platform='unknown'
+unamestr=`uname`
+if [[ "$unamestr" == 'Linux' ]]; then
+   platform='linux'
+elif [[ "$unamestr" == 'Darwin' ]]; then
+   platform='osx'
+fi
+
+if [[ $platform == 'linux' ]]; then
+  # exec xdg-open 
+  echo TODO: implement xdg-open params for linux
+elif [[ $platform == 'osx' ]]; then
+  exec open -n -a OBS.app
+fi
