@@ -13,7 +13,7 @@
     "posix_terminal_shell": "zsh",
     "jobs_tab_visibility": "shown",
     "rmd_viewer_type": "pane",
-    "default_project_location": "~/academy",
+    "default_project_location": "~/code",
     "cran_mirror": {
         "name": "Custom",
         "host": "Custom",
