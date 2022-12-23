@@ -1,0 +1,8 @@
+#!/bin/bash
+
+pkgutil --forget org.R-project.arm64.R.fw.pkg
+
+#sudo pkgutil --forget org.r-project.R.el-capitan.fw.pkg \
+#             --forget org.r-project.x86_64.tcltk.x11 \
+#             --forget org.r-project.x86_64.texinfo \
+#             --forget org.r-project.R.el-capitan.GUI.pkg

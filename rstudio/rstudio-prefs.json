@@ -1,0 +1,56 @@
+{
+    "initial_working_directory": "~",
+    "pdf_previewer": "none",
+    "scroll_past_end_of_document": true,
+    "wrap_tab_navigation": false,
+    "console_double_click_select": true,
+    "save_workspace": "never",
+    "rainbow_parentheses": true,
+    "source_with_echo": true,
+    "rmd_auto_date": true,
+    "document_author": "statik",
+    "editor_theme": "Solarized Dark",
+    "posix_terminal_shell": "zsh",
+    "jobs_tab_visibility": "shown",
+    "rmd_viewer_type": "pane",
+    "default_project_location": "~/academy",
+    "cran_mirror": {
+        "name": "Custom",
+        "host": "Custom",
+        "url": "https://packagemanager.rstudio.com/all/latest",
+        "secondary": "",
+        "country": "",
+        "changed": false
+    },
+    "global_theme": "alternate",
+    "show_hidden_files": true,
+    "panes": {
+        "quadrants": [
+            "Source",
+            "Console",
+            "TabSet2",
+            "TabSet1"
+        ],
+        "tabSet1": [
+            "Environment",
+            "History",
+            "Connections",
+            "Build",
+            "VCS",
+            "Tutorial",
+            "Presentation"
+        ],
+        "tabSet2": [
+            "Files",
+            "Plots",
+            "Packages",
+            "Help",
+            "Viewer",
+            "Presentations"
+        ],
+        "hiddenTabSet": [],
+        "console_left_on_top": false,
+        "console_right_on_top": true,
+        "additional_source_columns": 0
+    }
+}
