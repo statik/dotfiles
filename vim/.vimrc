@@ -16,7 +16,9 @@ set t_Co=256
 syntax enable
 set background=dark
 let g:solarized_termtrans = 1 " This gets rid of the grey background
+
 colorscheme solarized
+hi Normal guibg=NONE ctermbg=NONE
 set number
 set relativenumber
 set noswapfile
@@ -50,4 +52,13 @@ let g:ale_fixers = {
 	    \ 'typescript': ['prettier'],
 	    \ 'css': ['prettier'],
 	    \}
+
+if exists("g:neovide")
+    " Put anything you want to happen only in Neovide here
+    " g:neovide_transparency should be 0 if you want to unify transparency of content and title bar.
+let g:neovide_transparency = 0.0
+let g:transparency = 0.8
+let g:neovide_background_color = '#0f1117'.printf('%x', float2nr(255 * g:transparency))
+
+endif
 
