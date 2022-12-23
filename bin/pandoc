@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
-if [[ $(hostname) == "havendev" ]]; then
+if [[ -f $HOME/.homebrew/bin/pandoc ]]; then
+  pandoc_cmd=${HOME}/.homebrew/bin/pandoc
+elif [[ -f /opt/homebrew/bin/pandoc ]]; then
+  pandoc_cmd=/opt/homebrew/bin/pandoc
+elif [[ -f /home/linuxbrew/.linuxbrew/bin/pandoc ]]; then
+  pandoc_cmd=/home/linuxbrew/.linuxbrew/bin/pandoc
+elif [[ -f $HOME/.linuxbrew/bin/pandoc ]]; then
   pandoc_cmd=${HOME}/.linuxbrew/bin/pandoc
 else
-  pandoc_cmd=/opt/homebrew/bin/pandoc
+    echo "Could not find real pandoc location, FIXME"
 fi
-
-#echo DEBUG pandoc $* >> pandoc-debug.log
 
 exec ${pandoc_cmd} "$@"
