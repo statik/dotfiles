@@ -1,7 +1,12 @@
 # adapted from https://github.com/gvelasq/dotfiles/blob/main/rstudio/r.snippets
 
-snippet emisnow
-	%<>%
+snippet eminstall
+  # use pak, it's faster
+  pak::pkg_install()
+
+#snippet emisnow
+#	%<>%
+	
 snippet emsetup
 	# 1. setup ----
 	library(assertthat)

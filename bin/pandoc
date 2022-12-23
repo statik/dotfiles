@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [[ $(hostname) == "havendev" ]]; then
+  pandoc_cmd=${HOME}/.linuxbrew/bin/pandoc
+else
+  pandoc_cmd=/opt/homebrew/bin/pandoc
+fi
+
 #echo DEBUG pandoc $* >> pandoc-debug.log
 
-exec /opt/homebrew/bin/pandoc "$@"
+exec ${pandoc_cmd} "$@"
