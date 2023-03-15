@@ -1,12 +1,5 @@
 # adapted from https://github.com/gvelasq/dotfiles/blob/main/rstudio/r.snippets
 
-snippet eminstall
-  # use pak, it's faster
-  pak::pkg_install()
-
-#snippet emisnow
-#	%<>%
-	
 snippet emsetup
 	# 1. setup ----
 	library(assertthat)
@@ -24,3 +17,7 @@ snippet dml
 	# !(${1:A} | ${2:B}) == !(${1:A}) & !(${2:B})
 	# the negation of a conjunction is the disjunction of the negations
 	# !(${1:A} & ${2:B}) == !(${1:A}) | !(${2:B})
+	
+snippet empk
+  pak::pkg_install()
+
