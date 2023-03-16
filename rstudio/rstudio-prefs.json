@@ -52,5 +52,7 @@
         "console_left_on_top": false,
         "console_right_on_top": true,
         "additional_source_columns": 0
-    }
+    },
+    "new_proj_git_init": true,
+    "new_proj_use_renv": true
 }
