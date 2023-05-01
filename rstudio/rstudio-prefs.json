@@ -13,7 +13,7 @@
     "posix_terminal_shell": "zsh",
     "jobs_tab_visibility": "shown",
     "rmd_viewer_type": "pane",
-    "default_project_location": "~/code",
+    "default_project_location": "~/academy",
     "cran_mirror": {
         "name": "Custom",
         "host": "Custom",
@@ -28,8 +28,8 @@
         "quadrants": [
             "Source",
             "Console",
-            "TabSet2",
-            "TabSet1"
+            "TabSet1",
+            "TabSet2"
         ],
         "tabSet1": [
             "Environment",
@@ -53,6 +53,9 @@
         "console_right_on_top": true,
         "additional_source_columns": 0
     },
-    "new_proj_git_init": true,
-    "new_proj_use_renv": true
+    "load_workspace": false,
+    "auto_detect_indentation": true,
+    "insert_native_pipe_operator": true,
+    "show_invisibles": true,
+    "highlight_r_function_calls": true
 }
