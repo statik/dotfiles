@@ -89,3 +89,4 @@
 	submoduleSummary = true
 [icdiff]
 	options = --line-numbers
+

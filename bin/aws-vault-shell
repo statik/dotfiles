@@ -20,27 +20,35 @@ blue=$(tput setaf 38)
 # Headers and  Logging
 #
 
-e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@" 
+e_header() {
+	printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@"
 }
-e_arrow() { printf "➜ $@\n"
+e_arrow() {
+	printf "➜ %s\n$" "$@"
 }
-e_success() { printf "${green}✔ %s${reset}\n" "$@"
+e_success() {
+	printf "${green}✔ %s${reset}\n" "$@"
 }
-echo 
-e_error() { printf "${red}✖ %s${reset}\n" "$@" 1>&2
+echo
+e_error() {
+	printf "${red}✖ %s${reset}\n" "$@" 1>&2
 }
-e_warning() { printf "${tan}➜ %s${reset}\n" "$@" 1>&2
+e_warning() {
+	printf "${tan}➜ %s${reset}\n" "$@" 1>&2
 }
-e_underline() { printf "${underline}${bold}%s${reset}\n" "$@"
+e_underline() {
+	printf "${underline}${bold}%s${reset}\n" "$@"
 }
-e_bold() { printf "${bold}%s${reset}\n" "$@"
+e_bold() {
+	printf "${bold}%s${reset}\n" "$@"
 }
-e_note() { printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@"
+e_note() {
+	printf "${underline}${bold}${blue}Note:${reset}  ${blue}%s${reset}\n" "$@"
 }
 
 function usage() {
-  e_bold "$USAGE"
-  e_note "$DESCRIPTION"
+	e_bold "$USAGE"
+	e_note "$DESCRIPTION"
 }
 
 export USAGE='aws-vault-shell <profile name>'
@@ -60,11 +68,11 @@ export DESCRIPTION='
 '
 
 type aws-vault >/dev/null 2>&1 || {
-  e_error "Error: aws-vault cli must be installed (try brew install aws-vault)"
-  usage
-  exit 1
+	e_error "Error: aws-vault cli must be installed (try brew install aws-vault)"
+	usage
+	exit 1
 }
 
 AWS_PROFILE_NAME=${1:-SandboxSSO}
-AWS_ASSUME_ROLE_TTL=${2:-3h}
+AWS_ASSUME_ROLE_TTL=${2:-1h}
 aws-vault exec "$AWS_PROFILE_NAME" --duration "$AWS_ASSUME_ROLE_TTL" "$SHELL"

@@ -13,7 +13,7 @@
     "posix_terminal_shell": "zsh",
     "jobs_tab_visibility": "shown",
     "rmd_viewer_type": "pane",
-    "default_project_location": "~/academy",
+    "default_project_location": "~/posit",
     "cran_mirror": {
         "name": "Custom",
         "host": "Custom",
@@ -57,5 +57,12 @@
     "auto_detect_indentation": true,
     "insert_native_pipe_operator": true,
     "show_invisibles": true,
-    "highlight_r_function_calls": true
+    "highlight_r_function_calls": true,
+    "python_type": "system",
+    "python_version": "3.11.2",
+    "python_path": "~/.pyenv/versions/3.11.2/bin/python",
+    "new_proj_git_init": true,
+    "new_proj_use_renv": true,
+    "copilot_enabled": true,
+    "copilot_indexing_enabled": true
 }
