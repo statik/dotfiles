@@ -155,6 +155,9 @@ export NVM_DIR="$HOME/.nvm"
 
 #source $(brew --prefix nvm)/nvm.sh
 
+# dat quarto version manager
+export QVM_BIN_DIR="$HOME/.config/qvm/bin"
+export PATH=$PATH:$QVM_BIN_DIR
 
 if [[ -f "$HOME/.rbenv/version" ]]; then
   # dat ruby
