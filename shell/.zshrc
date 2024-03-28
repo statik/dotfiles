@@ -128,6 +128,12 @@ fi
 #PY3_USER_BASE_PATH=$(python3 -m site --user-base)
 #export PATH=$PATH:$PY3_USER_BASE_PATH/bin
 
+# if we have PTD configure the completions
+if type ptd &>/dev/null; then
+  eval "$(_PTD_COMPLETE=zsh_source ptd)"
+fi
+
+
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
