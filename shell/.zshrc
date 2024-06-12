@@ -102,10 +102,19 @@ elif [[ $platform == 'osx' ]]; then
 
   # Add homebrew bin directories to PATH.
   export PATH="$BREWPATH/bin:$BREWPATH/sbin:$PATH"
+
+  # use all these gnubins (from kubernetes developer docs)
+  GNUBINS="$(find `brew --prefix`/opt -type d -follow -name gnubin -print)"
+
+  for bindir in ${GNUBINS[@]}
+  do
+    export PATH=$bindir:$PATH
+  done
+  export PATH
   # emurphy - use gnu sed
-  export PATH="$BREWPATH/opt/gnu-sed/libexec/gnubin:$PATH"
+  #export PATH="$BREWPATH/opt/gnu-sed/libexec/gnubin:$PATH"
   # use gnu xargs
-  export PATH="$BREWPATH/opt/findutils/libexec/gnubin:$PATH"
+  #export PATH="$BREWPATH/opt/findutils/libexec/gnubin:$PATH"
 
   # fortran stuff for compiling R on m1
   # https://mac.r-project.org/tools/
@@ -129,9 +138,9 @@ fi
 #export PATH=$PATH:$PY3_USER_BASE_PATH/bin
 
 # if we have PTD configure the completions
-if type ptd &>/dev/null; then
-  eval "$(_PTD_COMPLETE=zsh_source ptd)"
-fi
+#if type ptd &>/dev/null; then
+#  eval "$(_PTD_COMPLETE=zsh_source ptd)"
+#fi
 
 
 
@@ -281,6 +290,9 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 if [[ $platform == 'osx' ]]; then
   # Secretive Config
   export SSH_AUTH_SOCK=/Users/emurphy/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+  # mojo stuff
+  export MODULAR_HOME="/Users/emurphy/.modular"
+  export PATH="/Users/emurphy/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 fi
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
 export PATH="/Users/emurphy/.rd/bin:$PATH"

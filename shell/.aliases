@@ -21,6 +21,7 @@ alias la="exa -abghl --git --color=automatic"
 alias l="exa -l --color=automatic"
 alias ls="exa -l --color=automatic --git"
 alias tree="exa -l --tree --git"
+alias gitversion="git describe --always --dirty --tags"
 
 
 # some helpers for ssh tunnel proxies from
@@ -44,5 +45,4 @@ alias bcdk2="bazel run //infra:cdk2 --"
 alias bcdk3="bazel run //infra:cdk3 --"
 
 alias k=kubectl
-alias docker=podman
 
