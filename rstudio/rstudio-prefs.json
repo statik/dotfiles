@@ -53,6 +53,7 @@
         "console_right_on_top": true,
         "additional_source_columns": 0
     },
+<<<<<<< HEAD
     "load_workspace": false,
     "auto_detect_indentation": true,
     "insert_native_pipe_operator": true,
@@ -65,4 +66,9 @@
     "new_proj_use_renv": true,
     "copilot_enabled": true,
     "copilot_indexing_enabled": true
+    "syntax_color_console": true,
+    "font_size_points": 12,
+    "auto_append_newline": true,
+    "strip_trailing_whitespace": true,
+    "full_project_path_in_window_title": true
 }
