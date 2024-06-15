@@ -53,7 +53,6 @@
         "console_right_on_top": true,
         "additional_source_columns": 0
     },
-<<<<<<< HEAD
     "load_workspace": false,
     "auto_detect_indentation": true,
     "insert_native_pipe_operator": true,
