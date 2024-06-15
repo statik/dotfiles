@@ -17,10 +17,11 @@ alias chkpath="echo $PATH |tr \':\' \'\\\n\' |xargs ls -ld"
 alias bt='wget http://cachefly.cachefly.net/100mb.test -O /dev/null'
 alias dig='dig +short +noshort'
 
-alias la="exa -abghl --git --color=automatic"
-alias l="exa -l --color=automatic"
-alias ls="exa -l --color=automatic --git"
-alias tree="exa -l --tree --git"
+alias la="eza -abghl --git --color=automatic"
+alias l="eza -l --color=automatic"
+alias ls="eza -l --color=automatic --git"
+alias tree="eza -l --tree --git"
+
 alias gitversion="git describe --always --dirty --tags"
 
 
