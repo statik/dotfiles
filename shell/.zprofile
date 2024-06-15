@@ -63,3 +63,6 @@ if (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
 #eval "$(pyenv init --path)"
+
+# Added by OrbStack: command-line tools and integration
+# source ~/.orbstack/shell/init.zsh 2>/dev/null || :
