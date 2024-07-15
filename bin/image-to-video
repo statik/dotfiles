@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# This will create a 5 second long mp4 file using the provided image
+_dur=5
+_framerate=30
+_background_color='black'
+_fade="fade=in:0:25,fade=out:50:60"
+_inputimage="$1"
+_outputname="${2:-${1}.${_dur}_sec.mp4}"
+_format="libx265"
+_pixformat="yuv420p"
+_scale="scale=1920:1080,loop=-1:1"
+
+
+echo "Converting from: ${_inputimage} to: ${_outputname}"
+
+ffmpeg \
+-framerate "${_framerate}" \
+-i "${_inputimage}" \
+-t "${_dur}" \
+-c:v "${_format}" \
+-x265-params lossless=1 \
+-pix_fmt "${_pixformat}" \
+-vf "${_scale}" \
+-movflags faststart \
+-tag:v hvc1 \
+"${_outputname}"
