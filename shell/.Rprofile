@@ -8,8 +8,7 @@ if (interactive()) {
 
 ## Default repo
 local({r <- getOption("repos")
-       r["CRAN"] <- "https://cloud.r-project.org"
-       options(repos=r)
+  options(repos = c(CRAN = "https://p3m.dev/cran/latest"))
 })
 if (Sys.info()[["sysname"]] == "Linux") {
   options(
