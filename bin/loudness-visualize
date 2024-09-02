@@ -87,4 +87,4 @@ text=${input}
 filename=${text%.*}
 extension=${text##*.}
 
-ffmpeg -loglevel ${loglevel} -i "${input}" -filter_complex ebur128=video=1:target=-16[OUT] -map [OUT] -r:v 30.000 -codec:v libx264 -pix_fmt:v yuv420p -c:a aac -f nut - | ffplay -
+ffmpeg -loglevel ${loglevel} -i "${input}" -filter_complex ebur128=video=1:target=-24[OUT] -map [OUT] -r:v 30.000 -codec:v libx264 -pix_fmt:v yuv420p -c:a aac -f nut - | ffplay -
