@@ -5,6 +5,8 @@ if [[ $(hostname) == "havendev" ]]; then
     exec tmux new-session -A -s workspace
   fi
 fi
+# set up direnv
+eval "$(direnv hook zsh)"
 
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -83,7 +85,7 @@ elif [[ $platform == 'osx' ]]; then
   export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
   #export PATH=$PATH:~/apache-maven-3.5.0/bin
   # python3 user path (for stuff installed with pip install --user)
-  export PATH=$PATH:$BREWPATH/bin/python3.9
+  #export PATH=$PATH:$BREWPATH/bin/python3.9
   # Postgres.app path
   export PATH=/Applications/Postgres.app/Contents/Versions/10/bin:$PATH
 
@@ -127,12 +129,14 @@ fi
 export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 if [[ -x $(command -v pyenv) ]]; then
   #echo "Loading pyenv"
-  #export PATH="$HOME/.pyenv/bin:$PATH"
   eval "$(pyenv init --path)"
   eval "$(pyenv virtualenv-init -)"
 else
-  echo "not loading pyenv"
+#  echo "not loading pyenv"
 fi
+
+# for `uv venv` preferences
+UV_PYTHON_PREFERENCE=managed
 
 #PY3_USER_BASE_PATH=$(python3 -m site --user-base)
 #export PATH=$PATH:$PY3_USER_BASE_PATH/bin
@@ -218,8 +222,8 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # virtualenvwrapper
 
-export WORKON_HOME=~/.venv
-if [ -f '/usr/local/bin/virtualenvwrapper.sh' ]; then source /usr/local/bin/virtualenvwrapper.sh; fi
+#export WORKON_HOME=~/.venv
+#if [ -f '/usr/local/bin/virtualenvwrapper.sh' ]; then source /usr/local/bin/virtualenvwrapper.sh; fi
 
 # fasd https://github.com/clvv/fasd
 # inspired by autojump and Z
@@ -250,8 +254,6 @@ export PATH="/usr/local/opt/Qt/bin:$PATH"
 # Test your cluster with:
 #export KUBECONFIG=/Users/emurphy/kubeconfig
 
-# set up direnv
-eval "$(direnv hook zsh)"
 
 # announce if working in aws-shell
 # if [ -n "${AWS_VAULT}" ] ; then
