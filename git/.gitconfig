@@ -85,6 +85,18 @@
 [init]
 	defaultBranch = main
 
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true # use n and N to move between diff sections
+  dark = true
+  hyperlinks = true
+  hyperlinks-file-link-format = "vscode://file/{path}:{line}"
+
+[merge]
+  conflictstyle = zdiff3
+
 [status]
 	submoduleSummary = true
 [icdiff]
