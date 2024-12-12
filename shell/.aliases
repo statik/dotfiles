@@ -48,3 +48,8 @@ alias bcdk3="bazel run //infra:cdk3 --"
 alias k=kubectl
 
 alias docker=podman
+
+# show  ripgrep output formatted through delta to allow clicking on
+# links that will open  up in vscode (delta config is in .gitconfig)
+rg() { command rg --json "$@"|delta; }
+

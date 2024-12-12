@@ -5,8 +5,6 @@ if [[ $(hostname) == "havendev" ]]; then
     exec tmux new-session -A -s workspace
   fi
 fi
-# set up direnv
-eval "$(direnv hook zsh)"
 
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -125,6 +123,10 @@ elif [[ $platform == 'osx' ]]; then
 
   export PATH="/Users/emurphy/.homebrew/opt/qt@5/bin:$PATH"
 fi
+
+
+# set up direnv
+eval "$(direnv hook zsh)"
 
 export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 if [[ -x $(command -v pyenv) ]]; then
@@ -324,3 +326,8 @@ esac
 # pnpm end
 
 export VCPKG_ROOT="$HOME/vcpkg"
+
+fpath+=(~/dotfiles/completions)
+
+export SHELL=$(command -v $SHELL)
+
