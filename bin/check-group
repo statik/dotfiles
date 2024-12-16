@@ -1,0 +1,6 @@
+#!/bin/bash
+
+location=$(git -C $1 remote -v | grep fetch | cut -d ':' -f 2)
+
+echo ${location}
+echo ${location}|sed 's/.*\/\([^/]*\)\/.*/\1/'
