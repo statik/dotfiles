@@ -125,8 +125,6 @@ elif [[ $platform == 'osx' ]]; then
 fi
 
 
-# set up direnv
-eval "$(direnv hook zsh)"
 
 export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 if [[ -x $(command -v pyenv) ]]; then
@@ -331,3 +329,5 @@ fpath+=(~/dotfiles/completions)
 
 export SHELL=$(command -v $SHELL)
 
+# set up direnv
+eval "$(direnv hook zsh)"
