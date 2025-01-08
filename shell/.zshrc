@@ -1,4 +1,8 @@
 # tmux must be before powerlevel10k instant prompt
+#
+if [[ "$TERM_PROGRAM" == "ghostty" ]]; then
+    export TERM=xterm-256color
+fi
 
 if [[ $(hostname) == "havendev" ]]; then
   if [ -z $TMUX ] && [ -z $RSTUDIO ]; then
