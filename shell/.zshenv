@@ -15,3 +15,7 @@ alias zcp='zmv -C'
 alias zln='zmv -L'
 
 alias assume=". assume"
+
+fpath=($HOME/.granted/zsh_autocomplete/assume/ $fpath)
+
+fpath=($HOME/.granted/zsh_autocomplete/granted/ $fpath)
