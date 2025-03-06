@@ -130,14 +130,14 @@ fi
 
 
 
-export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
-if [[ -x $(command -v pyenv) ]]; then
+#export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
+#if [[ -x $(command -v pyenv) ]]; then
   #echo "Loading pyenv"
-  eval "$(pyenv init --path)"
-  eval "$(pyenv virtualenv-init -)"
-else
+#  eval "$(pyenv init --path)"
+#  eval "$(pyenv virtualenv-init -)"
+#else
 #  echo "not loading pyenv"
-fi
+#fi
 
 # for `uv venv` preferences
 UV_PYTHON_PREFERENCE=managed
@@ -335,3 +335,8 @@ export SHELL=$(command -v $SHELL)
 
 # set up direnv
 eval "$(direnv hook zsh)"
+
+export CLAUDE_CODE_USE_BEDROCK=1
+export DISABLE_PROMPT_CACHING=1
+export ANTHROPIC_MODEL="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+

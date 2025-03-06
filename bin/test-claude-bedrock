@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MODEL_ID="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+
+echo "Testing AWS Bedrock access for ${MODEL_ID}..."
+
+# Create a temporary JSON payload file
+TMP_FILE=$(mktemp)
+trap 'rm -f $TMP_FILE' EXIT
+
+cat > "$TMP_FILE" << EOF
+{
+  "anthropic_version": "bedrock-2023-05-31",
+  "max_tokens": 200,
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "What LLM are you? Are you running in AWS Bedrock? Answer in 10 words or less."
+        }
+      ]
+    }
+  ]
+}
+EOF
+
+# Call Bedrock API
+aws bedrock-runtime invoke-model \
+  --model-id ${MODEL_ID} \
+  --cli-binary-format raw-in-base64-out \
+  --body file://$TMP_FILE \
+  --output json \
+  invoke-model-response.json > /dev/null
+
+# Extract the response message
+echo -e "\nResponse from Claude 3.7 Sonnet on AWS Bedrock:"
+jq '.content[] | select(.type == "text") | .text' invoke-model-response.json
+echo -e "\nFull response saved to invoke-model-response.json"
