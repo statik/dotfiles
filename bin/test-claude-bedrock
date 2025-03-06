@@ -37,5 +37,5 @@ aws bedrock-runtime invoke-model \
 
 # Extract the response message
 echo -e "\nResponse from Claude 3.7 Sonnet on AWS Bedrock:"
-jq '.content[] | select(.type == "text") | .text' invoke-model-response.json
+jq '.model, (.content[] | select(.type == "text") | .text)' invoke-model-response.json
 echo -e "\nFull response saved to invoke-model-response.json"
