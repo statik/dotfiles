@@ -8,7 +8,7 @@ if (interactive()) {
 
 ## Default repo
 local({r <- getOption("repos")
-  options(repos = c(CRAN = "https://p3m.dev/cran/latest"))
+  options(repos = c(RSPM = "https://p3m.dev/cran/latest"))
 })
 if (Sys.info()[["sysname"]] == "Linux") {
   options(
