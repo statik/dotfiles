@@ -66,3 +66,7 @@ fi
 
 # Added by OrbStack: command-line tools and integration
 # source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+# Add .NET Core SDK tools
+
+if [ -d "$HOME/.dotnet/tools" ]; then export PATH="$PATH:$HOME/.dotnet/tools"; fi
+
