@@ -8,7 +8,7 @@ if (interactive()) {
 
 ## Default repo
 local({r <- getOption("repos")
-  options(repos = c(RSPM = "https://p3m.dev/cran/latest"))
+  options(repos = c(RSPM = "https://packagemanager.posit.co/cran/latest"))
 })
 if (Sys.info()[["sysname"]] == "Linux") {
   options(
@@ -16,7 +16,7 @@ if (Sys.info()[["sysname"]] == "Linux") {
     HTTPUserAgent = sprintf("R/%s R (%s)", getRversion(), paste(getRversion(), R.version["platform"], R.version["arch"], R.version["os"])),
     repos = c(
       statik = "https://statik.r-universe.dev",
-      REPO_NAME = "https://packagemanager.rstudio.com/all/__linux__/jammy/latest"
+      REPO_NAME = "https://packagemanager.posit.co/all/__linux__/jammy/latest"
     )
   )
 }
