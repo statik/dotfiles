@@ -295,13 +295,13 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 if [[ $platform == 'osx' ]]; then
   # Secretive Config
-  export SSH_AUTH_SOCK=/Users/emurphy/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+  # export SSH_AUTH_SOCK=/Users/emurphy/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
   # mojo stuff
-  export MODULAR_HOME="/Users/emurphy/.modular"
-  export PATH="/Users/emurphy/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
+  # export MODULAR_HOME="/Users/emurphy/.modular"
+  # export PATH="/Users/emurphy/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
 fi
 ### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
-export PATH="/Users/emurphy/.rd/bin:$PATH"
+# export PATH="/Users/emurphy/.rd/bin:$PATH"
 ### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
 
 # >>> juliaup initialize >>>
@@ -339,4 +339,6 @@ eval "$(direnv hook zsh)"
 export CLAUDE_CODE_USE_BEDROCK=1
 export DISABLE_PROMPT_CACHING=1
 export ANTHROPIC_MODEL="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+
+if [ -f "$HOME/.local/bin/env" ]; then . "$HOME/.local/bin/env"; fi
 
