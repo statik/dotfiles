@@ -12,7 +12,7 @@ fi
 
 stow -t ~/bin bin
 stow ruby
-stow shell
+stow --adopt shell
 stow vim
 stow psql
 stow git
