@@ -154,7 +154,9 @@ UV_PYTHON_PREFERENCE=managed
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+  if [[ -z "${CLAUDECODE}" ]]; then
+    source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+  fi
 fi
 #source $BREWPATH/opt/gitstatus/gitstatus.prompt.zsh
 
