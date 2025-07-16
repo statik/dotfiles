@@ -1,3 +1,9 @@
+[column]
+  ui = auto
+[branch]
+  sort = -committerdate
+[tag]
+  sort = version:refname
 [alias]
   st = status
   co = checkout
@@ -20,15 +26,27 @@
   newNormal = "green bold"
   newHighlight = "green bold 22"
 [push]
-	default = simple
+  default = simple
   autoSetupRemote = true
+  followTags = true
 [pull]
   rebase = true
+[rebase]
+  autoSquash = true
+  autoStash = true
+  updateRefs = true
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
+[help]
+  autocorrect = prompt
+
 [color "branch"]
   current = yellow reverse
   local = yellow
 [merge]
-  conflictstyle = diff3
+  conflictstyle = zdiff3
   tool = opendiff
 [user]
 	name = Elliot Murphy
@@ -58,15 +76,16 @@
 [tag]
 	forceSignAnnotated = true
 [core]
-	excludesfile = /Users/emurphy/.gitignore
+	excludesfile = ~/.gitignore
 	pager = delta
 #	pager = diff-so-fancy | less --tabs=4 -RFX
 	autocrlf = false
 	editor = nvim
 [commit]
-	template = ~/.gitmessage
+  verbose = true
+  template = ~/.gitmessage
 [init]
-	defaultBranch = main
+  defaultBranch = main
 
 [interactive]
   diffFilter = delta --color-only
