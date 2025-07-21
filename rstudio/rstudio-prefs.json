@@ -1,35 +1,11 @@
 {
-    "initial_working_directory": "~",
-    "pdf_previewer": "none",
-    "scroll_past_end_of_document": true,
-    "wrap_tab_navigation": false,
-    "console_double_click_select": true,
-    "save_workspace": "never",
-    "rainbow_parentheses": true,
-    "source_with_echo": true,
-    "rmd_auto_date": true,
-    "document_author": "statik",
-    "editor_theme": "Solarized Dark",
-    "posix_terminal_shell": "zsh",
-    "jobs_tab_visibility": "shown",
-    "rmd_viewer_type": "pane",
-    "default_project_location": "~/posit",
-    "cran_mirror": {
-        "name": "Custom",
-        "host": "Custom",
-        "url": "https://packagemanager.rstudio.com/all/latest",
-        "secondary": "",
-        "country": "",
-        "changed": false
-    },
-    "global_theme": "alternate",
-    "show_hidden_files": true,
     "panes": {
         "quadrants": [
             "Source",
             "Console",
             "TabSet1",
-            "TabSet2"
+            "TabSet2",
+            "HiddenTabSet"
         ],
         "tabSet1": [
             "Environment",
@@ -53,21 +29,5 @@
         "console_right_on_top": true,
         "additional_source_columns": 0
     },
-    "load_workspace": false,
-    "auto_detect_indentation": true,
-    "insert_native_pipe_operator": true,
-    "show_invisibles": true,
-    "highlight_r_function_calls": true,
-    "python_type": "system",
-    "python_version": "3.11.2",
-    "python_path": "~/.pyenv/versions/3.11.2/bin/python",
-    "new_proj_git_init": true,
-    "new_proj_use_renv": true,
-    "copilot_enabled": true,
-    "copilot_indexing_enabled": true
-    "syntax_color_console": true,
-    "font_size_points": 12,
-    "auto_append_newline": true,
-    "strip_trailing_whitespace": true,
-    "full_project_path_in_window_title": true
+    "copilot_enabled": true
 }
