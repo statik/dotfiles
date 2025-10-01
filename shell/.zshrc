@@ -338,9 +338,9 @@ export SHELL=$(command -v $SHELL)
 # set up direnv
 eval "$(direnv hook zsh)"
 
-export CLAUDE_CODE_USE_BEDROCK=1
-export DISABLE_PROMPT_CACHING=1
-export ANTHROPIC_MODEL="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+#export CLAUDE_CODE_USE_BEDROCK=1
+#export DISABLE_PROMPT_CACHING=1
+#export ANTHROPIC_MODEL="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
 
 if [ -f "$HOME/.local/bin/env" ]; then . "$HOME/.local/bin/env"; fi
 
