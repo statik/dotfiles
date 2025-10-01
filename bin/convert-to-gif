@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+USAGE='convert-to-gif inputfile [outputfile]'
+DESCRIPTION='
+
+  Converts a video file to gif for embedding animated images on a web page
+
+  The outputfile is optional, if not provided it will be based on the input file name
+  
+  Dependencies: requires ffmpeg command to be installed.
+'
+
+
+function usage() {
+	echo "$USAGE" "$DESCRIPTION" >&2
+}
+
+type ffmpeg >/dev/null 2>&1 || {
+	echo >&2 "Error: ffmpeg cli must be installed. Aborting."
+	usage
+	exit 1
+}
+
+[ $# -ge 1 ] || {
+	usage
+	exit 1
+}
+
+input="$1"
+output="${2:-${1}.converted.gif}"
+
+
+echo "Converting from: $input to: $output"
+
+ffmpeg -i "$input" -vf "fps=10,scale=640:-1:flags=lanczos" -c:v gif "$output"
+
