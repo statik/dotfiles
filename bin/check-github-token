@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Check if token argument is provided
+if [ -z "$1" ]; then
+    gum style --foreground 196 --bold "Error: No token provided"
+    gum style --foreground 243 "Usage: $0 <github-token>"
+    exit 1
+fi
+
+TOKEN="$1"
+
+gum spin --spinner dot --title "Checking GitHub token..." -- sleep 1
+
+# Check token validity
+RESPONSE=$(curl -s -w "\n%{http_code}" -H "Authorization: token $TOKEN" https://api.github.com/user)
+HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+BODY=$(echo "$RESPONSE" | sed '$d')
+
+if [ "$HTTP_CODE" = "200" ]; then
+    USERNAME=$(echo "$BODY" | grep -o '"login":"[^"]*' | cut -d'"' -f4)
+    gum style \
+        --border double \
+        --border-foreground 82 \
+        --padding "1 2" \
+        --margin "1 0" \
+        "$(gum style --foreground 82 --bold '✓ Token is valid')" \
+        "" \
+        "$(gum style --foreground 243 'Authenticated as:') $(gum style --foreground 212 --bold "$USERNAME")"
+    exit 0
+elif [ "$HTTP_CODE" = "401" ]; then
+    gum style \
+        --border double \
+        --border-foreground 196 \
+        --padding "1 2" \
+        --margin "1 0" \
+        "$(gum style --foreground 196 --bold '✗ Token is invalid or expired')"
+    exit 1
+else
+    gum style \
+        --border double \
+        --border-foreground 214 \
+        --padding "1 2" \
+        --margin "1 0" \
+        "$(gum style --foreground 214 --bold '⚠ Unexpected response')" \
+        "" \
+        "$(gum style --foreground 243 'HTTP Status:') $(gum style --foreground 214 "$HTTP_CODE")"
+    exit 1
+fi
