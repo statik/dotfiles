@@ -16,6 +16,11 @@ function usage() {
 	echo "$USAGE" "$DESCRIPTION" >&2
 }
 
+if [[ "${1:-}" =~ ^(-h|--help)$ ]]; then
+	usage
+	exit 0
+fi
+
 type ffmpeg >/dev/null 2>&1 || {
 	echo >&2 "Error: ffmpeg cli must be installed. Aborting."
 	usage

@@ -1,1 +1,4 @@
 invoke-model-response.json
+
+# Unused binary assets
+bin/guest-card-*.png

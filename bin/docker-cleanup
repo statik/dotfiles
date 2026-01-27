@@ -30,10 +30,12 @@ if [ "$1" = "-n" ]; then
 
 	exit
 fi
-if [ -n "$1" ]; then
+if [ "$1" = "-h" ] || [ "$1" = "--help" ] || { [ -n "$1" ] && [ "$1" != "-n" ]; }; then
 	echo "Cleanup docker files: remove untagged containers and images."
-	echo "Usage: ${0##*/} [-n]"
+	echo "Usage: ${0##*/} [-n] [-h|--help]"
 	echo "   -n: dry run: display what would get removed."
+	echo "   -h, --help: show this help message."
+	[ "$1" = "-h" ] || [ "$1" = "--help" ] && exit 0
 	exit 1
 fi
 

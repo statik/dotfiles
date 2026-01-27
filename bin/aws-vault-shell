@@ -67,6 +67,11 @@ export DESCRIPTION='
   fi;
 '
 
+if [[ "${1:-}" =~ ^(-h|--help)$ ]]; then
+	usage
+	exit 0
+fi
+
 type aws-vault >/dev/null 2>&1 || {
 	e_error "Error: aws-vault cli must be installed (try brew install aws-vault)"
 	usage

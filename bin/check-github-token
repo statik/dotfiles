@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Show help
+if [[ "${1:-}" =~ ^(-h|--help)$ ]]; then
+    echo "Usage: $(basename "$0") <github-token>"
+    echo
+    echo "Validates a GitHub personal access token and displays the authenticated user."
+    echo
+    echo "Options:"
+    echo "  -h, --help    Show this help message"
+    exit 0
+fi
+
 # Check if token argument is provided
 if [ -z "$1" ]; then
     gum style --foreground 196 --bold "Error: No token provided"

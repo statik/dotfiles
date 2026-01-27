@@ -9,6 +9,6 @@ done
 echo "kill ssh"
 killall ssh
 echo "kill ssh muxers"
-for pid in `ps -ef | grep ssh | grep -v grep | awk '{print $2}'`; do
+for pid in $(ps -ef | grep ssh | grep -v grep | awk '{print $2}'); do
     kill $pid
 done
