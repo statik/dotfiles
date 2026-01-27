@@ -4,6 +4,7 @@
   sort = -committerdate
 [tag]
   sort = version:refname
+  forceSignAnnotated = true
 [alias]
   st = status
   co = checkout
@@ -42,9 +43,6 @@
 [help]
   autocorrect = prompt
 
-[color "branch"]
-  current = yellow reverse
-  local = yellow
 [merge]
   conflictstyle = zdiff3
   tool = opendiff
@@ -73,8 +71,6 @@
 	process = git-lfs filter-process
 [gpg]
 	#program = /usr/local/bin/krgpg
-[tag]
-	forceSignAnnotated = true
 [core]
 	excludesfile = ~/.gitignore
 	pager = delta
@@ -86,9 +82,6 @@
   template = ~/.gitmessage
 [init]
   defaultBranch = main
-
-[interactive]
-  diffFilter = delta --color-only
 
 [delta]
   features = decorations
@@ -111,9 +104,6 @@
     hunk-header-file-style = red
     hunk-header-line-number-style = "#067a00"
     hunk-header-style = file line-number syntax
-
-[merge]
-  conflictstyle = zdiff3
 
 [status]
 	submoduleSummary = true
