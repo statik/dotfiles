@@ -11,6 +11,14 @@ alias git_delete_merged_branches='git branch --merged | grep -v "\*" | xargs -n 
 alias chkpath="echo $PATH |tr \':\' \'\\\n\' |xargs ls -ld"
 
 #alias claude="SHELL=/bin/bash ~/.claude/local/claude"
+alias claude-yolo="claude --dangerously-skip-permissions"
+
+claude-local() {
+  ANTHROPIC_BASE_URL=http://localhost:1234 \
+  ANTHROPIC_AUTH_TOKEN=lmstudio \
+  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 \
+  claude "$@"
+}
 
 # git squash for some projects that like it
 #squash = !f(){ CUR=`git rev-parse HEAD` && git reset --soft ${1} && git commit -m "$(git log --format=%B ${1}..${CUR})"; };f 
