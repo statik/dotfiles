@@ -1,0 +1,361 @@
+#!/bin/bash
+#
+# Installs the latest RStudio daily desktop build for OSX/macOS and Ubuntu(amd64)
+#
+# https://support.rstudio.com/hc/en-us/articles/203842428-Getting-the-newest-RStudio-builds
+#
+# Source: https://gist.github.com/gadenbuie/7bb14b245a45e08173e54bc75ec38790
+
+set -e
+
+# ==============================================================================
+# Color and formatting setup (respects NO_COLOR)
+# ==============================================================================
+
+setup_colors() {
+    if [[ -z "${NO_COLOR:-}" && -t 1 ]]; then
+        BOLD='\033[1m'
+        DIM='\033[2m'
+        RESET='\033[0m'
+        GREEN='\033[32m'
+        BLUE='\033[34m'
+        YELLOW='\033[33m'
+        CYAN='\033[36m'
+        RED='\033[31m'
+    else
+        BOLD=''
+        DIM=''
+        RESET=''
+        GREEN=''
+        BLUE=''
+        YELLOW=''
+        CYAN=''
+        RED=''
+    fi
+}
+
+setup_colors
+
+# ==============================================================================
+# Output helpers
+# ==============================================================================
+
+header() {
+    echo ""
+    echo -e "${BOLD}${BLUE}▶ ${1}${RESET}"
+}
+
+info() {
+    echo -e "  ${DIM}ℹ${RESET} ${1}"
+}
+
+success() {
+    echo -e "  ${GREEN}✔${RESET} ${1}"
+}
+
+warn() {
+    echo -e "  ${YELLOW}!${RESET} ${1}"
+}
+
+error() {
+    echo -e "  ${RED}✘${RESET} ${1}"
+}
+
+step() {
+    echo -e "  ${CYAN}●${RESET} ${1}"
+}
+
+clear_last_line() {
+    if [[ -z "${NO_COLOR:-}" && -t 1 ]]; then
+        echo -en "\033[A\033[2K\r"
+    fi
+}
+
+step_done() {
+    clear_last_line
+    success "$1"
+}
+
+step_fail() {
+    clear_last_line
+    error "$1"
+}
+
+run_cmd() {
+    if [[ "$VERBOSE" == true ]]; then
+        "$@"
+    else
+        "$@" > /dev/null 2>&1
+    fi
+}
+
+# ==============================================================================
+# Help
+# ==============================================================================
+
+help() {
+    echo -e "${BOLD}Usage:${RESET} update-rstudio-daily [options]"
+    echo ""
+    echo "Installs the latest RStudio daily desktop build."
+    echo ""
+    echo -e "${BOLD}Options:${RESET}"
+    echo "  -v, --verbose    Show command output"
+    echo "  -h, --help       Show this help message"
+    echo ""
+    echo -e "${BOLD}Supported platforms:${RESET}"
+    echo "  - macOS"
+    echo "  - Ubuntu Linux (jammy/22.04)"
+}
+
+# ==============================================================================
+# Parse arguments
+# ==============================================================================
+
+VERBOSE=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -v|--verbose)
+            VERBOSE=true
+            shift
+            ;;
+        -h|--help)
+            help
+            exit 0
+            ;;
+        -*)
+            warn "Unknown option: $1"
+            echo ""
+            help
+            exit 1
+            ;;
+        *)
+            warn "Unexpected argument: $1"
+            echo ""
+            help
+            exit 1
+            ;;
+    esac
+done
+
+# ==============================================================================
+# RStudio process management
+# ==============================================================================
+
+# Check if RStudio is currently running
+is_rstudio_running() {
+    local platform=$1
+    if [ "$platform" = "macos" ]; then
+        pgrep -x "RStudio" > /dev/null
+    else
+        pgrep -i rstudio > /dev/null
+    fi
+}
+
+# Send quit signal to RStudio
+quit_rstudio() {
+    local platform=$1
+    if [ "$platform" = "macos" ]; then
+        osascript -e 'quit app "RStudio"' > /dev/null 2>&1
+    else
+        pkill -TERM -i rstudio
+    fi
+}
+
+# Wait for RStudio process to end
+wait_for_rstudio_quit() {
+    local platform=$1
+    local max_wait=30
+
+    for _ in $(seq 1 $max_wait); do
+        if ! is_rstudio_running "$platform"; then
+            return 0
+        fi
+        sleep 1
+    done
+
+    return 1
+}
+
+# Main function to ensure RStudio is not running before update
+ensure_rstudio_not_running() {
+    local platform=$1
+
+    if ! is_rstudio_running "$platform"; then
+        return 0
+    fi
+
+    echo ""
+    warn "RStudio is currently running"
+    echo -en "  Do you want to quit RStudio to proceed? ${DIM}(y/n)${RESET} "
+    read -n 1 -r
+    echo ""
+
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        info "Update cancelled"
+        exit 0
+    fi
+
+    step "Quitting RStudio gracefully..."
+    quit_rstudio "$platform"
+
+    if wait_for_rstudio_quit "$platform"; then
+        step_done "RStudio has quit"
+    else
+        step_fail "RStudio is still running (may have unsaved work)"
+        info "Please quit RStudio manually and run this script again"
+        exit 1
+    fi
+}
+
+# ==============================================================================
+# macOS installation
+# ==============================================================================
+
+install_macos_daily() {
+    INDEX_URL="https://dailies.rstudio.com/rstudio/latest/index.json"
+
+    header "Fetching RStudio daily build info"
+    info "Source: dailies.rstudio.com"
+
+    # Fetch the JSON and extract the macOS desktop download URL
+    step "Checking latest version"
+    RELEASE_URL=$(curl -s "${INDEX_URL}" | jq -r '.products.electron.platforms.macos.link')
+    if [ "${RELEASE_URL}" == "" ] || [ "${RELEASE_URL}" == "null" ]; then
+        step_fail "Could not extract daily build URL from JSON"
+        info "Check: ${INDEX_URL}"
+        exit 1
+    fi
+    step_done "Found latest build"
+
+    cd /tmp
+
+    TARGET=$(basename "${RELEASE_URL}")
+    # Volume name mirrors the DMG filename without extension.
+    VOLUME_NAME=$(basename "${TARGET}" .dmg)
+    VOLUME_MOUNT="/Volumes/${VOLUME_NAME}"
+
+    header "Downloading ${VOLUME_NAME}"
+    info "URL: ${RELEASE_URL}"
+    step "Downloading DMG..."
+    if [[ "$VERBOSE" == true ]]; then
+        curl -L -o "${TARGET}" "${RELEASE_URL}"
+    else
+        curl -sL -o "${TARGET}" "${RELEASE_URL}"
+    fi
+    step_done "Download complete"
+
+    header "Installing RStudio"
+    ensure_rstudio_not_running "macos"
+    step "Mounting disk image"
+    run_cmd hdiutil attach -quiet "${TARGET}"
+    step_done "Mounted"
+
+    step "Removing previous installation"
+    rm -rf /Applications/RStudio.app
+    step_done "Removed old version"
+
+    step "Copying to /Applications"
+    run_cmd cp -R "${VOLUME_MOUNT}/RStudio.app" /Applications
+    step_done "Installed"
+
+    step "Cleaning up"
+    run_cmd hdiutil detach -quiet "${VOLUME_MOUNT}"
+    rm "${TARGET}"
+    step_done "Cleaned up"
+
+    header "Done"
+    success "Installed ${VOLUME_NAME} to /Applications"
+    echo ""
+}
+
+# ==============================================================================
+# Ubuntu installation
+# ==============================================================================
+
+install_ubuntu_daily() {
+    INDEX_URL="https://dailies.rstudio.com/rstudio/latest/index.json"
+
+    header "Fetching RStudio daily build info"
+    info "Source: dailies.rstudio.com"
+
+    # Fetch the JSON and extract the Ubuntu desktop download URL (jammy/22.04)
+    step "Checking latest version"
+    URL=$(curl -s "${INDEX_URL}" | jq -r '.products.electron.platforms.jammy.link')
+    if [ "${URL}" == "" ] || [ "${URL}" == "null" ]; then
+        step_fail "Could not extract daily build URL from JSON"
+        info "Check: ${INDEX_URL}"
+        exit 1
+    fi
+    step_done "Found latest build"
+
+    PACKAGE=$(basename "${URL}")
+    TARGET="/tmp/${PACKAGE}"
+
+    # If previous file exists (from previous partial download, for example),
+    # remove it.
+    if [[ -f "${TARGET}" ]]; then
+        step "Removing existing package file"
+        rm "${TARGET}"
+    fi
+
+    header "Downloading ${PACKAGE}"
+    info "URL: ${URL}"
+    step "Downloading package..."
+    if [ -x /usr/bin/curl ] ; then
+        if [[ "$VERBOSE" == true ]]; then
+            curl -L -o "${TARGET}" "${URL}"
+        else
+            curl -sL -o "${TARGET}" "${URL}"
+        fi
+    elif [ -x /usr/bin/wget ] ; then
+        if [[ "$VERBOSE" == true ]]; then
+            wget -O "${TARGET}" "${URL}"
+        else
+            wget -q -O "${TARGET}" "${URL}"
+        fi
+    else
+        step_fail "Cannot find 'curl' or 'wget'"
+        exit 1
+    fi
+    step_done "Download complete"
+
+    header "Installing RStudio"
+    ensure_rstudio_not_running "ubuntu"
+    LAUNCH=""
+    if [[ $(whoami) != "root" ]]; then
+        LAUNCH="sudo"
+        info "Sudo required for installation"
+    fi
+    step "Installing package with dpkg"
+    if [[ "$VERBOSE" == true ]]; then
+        ${LAUNCH} dpkg -i "${TARGET}"
+    else
+        ${LAUNCH} dpkg -i "${TARGET}" > /dev/null 2>&1
+    fi
+    step_done "Installed"
+
+    step "Cleaning up"
+    rm "${TARGET}"
+    step_done "Cleaned up"
+
+    header "Done"
+    success "Installed ${PACKAGE}"
+    echo ""
+}
+
+
+# ==============================================================================
+# Main
+# ==============================================================================
+
+if [[ $(uname -s) = "Darwin" ]]; then
+    install_macos_daily
+elif [[ -f /etc/issue ]] && grep -q Ubuntu /etc/issue ; then
+    install_ubuntu_daily
+else
+    error "Unsupported platform"
+    info "This script only works on macOS and Ubuntu Linux"
+    exit 1
+fi
+
