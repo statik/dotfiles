@@ -77,6 +77,9 @@ if [[ $platform == 'linux' ]]; then
   export PATH="$BREWPATH/bin:$PATH"
   # aws vault on linux use file backend
   export AWS_VAULT_BACKEND=file
+
+  # for rust in the face of linuxbrew on WSL
+  export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/share/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 elif [[ $platform == 'osx' ]]; then
   export PATH=$HOME/bin:$PATH:$GOPATH/bin:/usr/local/opt/go/libexec/bin
   # maven 3. what have I done with my life?

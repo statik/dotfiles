@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Show help
+if [[ "${1:-}" =~ ^(-h|--help)$ ]]; then
+  cat <<EOF
+Usage: $(basename "$0")
+
+Fetches the list of available models from a LiteLLM proxy server.
+
+Required environment variables:
+  LITELLM_BASE    Base URL of the LiteLLM server (e.g. https://litellm.example.com)
+  LITELLM_KEY     API key / bearer token for the LiteLLM server
+
+Options:
+  -h, --help      Show this help message
+EOF
+  exit 0
+fi
+
+err() {
+  echo "Error: $*" >&2
+}
+
+# Check required dependencies
+missing_deps=0
+if ! command -v curl >/dev/null 2>&1; then
+  err "curl is not installed."
+  echo "  Install with:" >&2
+  echo "    macOS:         brew install curl" >&2
+  echo "    Debian/Ubuntu: sudo apt-get install curl" >&2
+  echo "    Fedora/RHEL:   sudo dnf install curl" >&2
+  missing_deps=1
+fi
+
+if ! command -v jq >/dev/null 2>&1; then
+  err "jq is not installed."
+  echo "  Install with:" >&2
+  echo "    macOS:         brew install jq" >&2
+  echo "    Debian/Ubuntu: sudo apt-get install jq" >&2
+  echo "    Fedora/RHEL:   sudo dnf install jq" >&2
+  missing_deps=1
+fi
+
+if [[ "$missing_deps" -ne 0 ]]; then
+  exit 1
+fi
+
+# Check required environment variables
+missing_vars=0
+if [[ -z "${LITELLM_BASE:-}" ]]; then
+  err "LITELLM_BASE is not set."
+  missing_vars=1
+fi
+
+if [[ -z "${LITELLM_KEY:-}" ]]; then
+  err "LITELLM_KEY is not set."
+  missing_vars=1
+fi
+
+if [[ "$missing_vars" -ne 0 ]]; then
+  cat >&2 <<'EOF'
+
+  Configure by adding the following to your ~/.zshrc or ~/.bashrc:
+    export LITELLM_BASE="https://your-litellm-server.example.com"
+    export LITELLM_KEY="sk-your-api-key-here"
+
+  Then reload your shell or run: source ~/.zshrc
+EOF
+  exit 1
+fi
+
+# Call the LiteLLM API, capturing body and HTTP status separately
+tmpfile=$(mktemp)
+trap 'rm -f "$tmpfile"' EXIT
+
+http_code=$(curl -sS -o "$tmpfile" -w "%{http_code}" \
+  -X GET "${LITELLM_BASE}/v1/models" \
+  -H "Authorization: Bearer ${LITELLM_KEY}") || {
+  err "curl failed to reach ${LITELLM_BASE}. Check network connectivity and LITELLM_BASE."
+  exit 1
+}
+
+body=$(cat "$tmpfile")
+
+if [[ "$http_code" =~ ^2[0-9][0-9]$ ]]; then
+  if echo "$body" | jq . >/dev/null 2>&1; then
+    echo "$body" | jq .
+  else
+    err "Received HTTP $http_code but response is not valid JSON."
+    echo "$body" >&2
+    exit 1
+  fi
+  exit 0
+fi
+
+# Non-2xx: surface a meaningful error
+case "$http_code" in
+  401 | 403)
+    err "Authentication failed (HTTP $http_code). Check that LITELLM_KEY is valid."
+    ;;
+  404)
+    err "Endpoint not found (HTTP 404). Check that LITELLM_BASE is correct: ${LITELLM_BASE}"
+    ;;
+  5*)
+    err "LiteLLM server error (HTTP $http_code). The server may be down or misconfigured."
+    ;;
+  000)
+    err "Could not connect to ${LITELLM_BASE}. Check network connectivity and LITELLM_BASE."
+    ;;
+  *)
+    err "Request failed with HTTP $http_code."
+    ;;
+esac
+
+if [[ -n "$body" ]]; then
+  echo "Response body:" >&2
+  if echo "$body" | jq . >/dev/null 2>&1; then
+    echo "$body" | jq . >&2
+  else
+    echo "$body" >&2
+  fi
+fi
+exit 1
