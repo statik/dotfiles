@@ -131,7 +131,8 @@ elif [[ $platform == 'osx' ]]; then
   export PATH="/Users/emurphy/.homebrew/opt/qt@5/bin:$PATH"
 fi
 
-
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
 #export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true"
 #if [[ -x $(command -v pyenv) ]]; then
@@ -209,6 +210,8 @@ fi
 #fi
 
 function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
+
+function 1k { cd "$(walk "$@")" }
 
 #export PATH=$PATH:/usr/local/pgsql/bin
 export PGHOST=localhost
@@ -347,3 +350,12 @@ eval "$(direnv hook zsh)"
 
 if [ -f "$HOME/.local/bin/env" ]; then . "$HOME/.local/bin/env"; fi
 
+
+# bun completions
+[ -s "/home/emurphy/.bun/_bun" ] && source "/home/emurphy/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+export YOKE_DIR=/home/emurphy/.yoke
