@@ -1,0 +1,213 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+USAGE='git-zip-working-files [--output-dir <dir>]'
+DESCRIPTION='
+
+  Creates a zip archive of the current Git working files so they can be
+  unpacked over a clean branch on another machine.
+
+  Includes modified, staged, and untracked non-ignored files. Deleted and
+  renamed tracked paths are recorded in the archive, but unzip cannot apply
+  removals.
+
+  The archive name is based on the remote repository name, local branch name,
+  and current date: <repo>-<branch>-<yyyymmdd-HHMMSS>.zip.
+'
+cleanup_temp_dir=''
+
+usage() {
+  printf '%s%s\n' "$USAGE" "$DESCRIPTION" >&2
+}
+
+die() {
+  printf 'Error: %s\n' "$1" >&2
+  usage
+  exit 1
+}
+
+require_command() {
+  local command_name="$1"
+
+  if ! command -v "$command_name" >/dev/null 2>&1; then
+    die "$command_name must be installed"
+  fi
+}
+
+cleanup() {
+  if [[ -n "$cleanup_temp_dir" ]]; then
+    rm -rf -- "$cleanup_temp_dir"
+  fi
+}
+
+sanitize_name() {
+  local value="$1"
+
+  value="${value%.git}"
+  value="${value//[^[:alnum:]._-]/-}"
+  value="${value//--/-}"
+  value="${value#-}"
+  value="${value%-}"
+
+  printf '%s\n' "$value"
+}
+
+remote_repo_name() {
+  local remote_url
+  local repo_name
+
+  if remote_url="$(git remote get-url origin 2>/dev/null)"; then
+    repo_name="${remote_url##*/}"
+    repo_name="${repo_name##*:}"
+  else
+    repo_name="$(basename "$(git rev-parse --show-toplevel)")"
+  fi
+
+  sanitize_name "$repo_name"
+}
+
+branch_name() {
+  local branch
+
+  branch="$(git branch --show-current)"
+  if [[ -z "$branch" ]]; then
+    branch="$(git rev-parse --short HEAD)"
+  fi
+
+  sanitize_name "$branch"
+}
+
+parse_args() {
+  output_dir="$PWD"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --output-dir)
+        [[ $# -ge 2 ]] || die '--output-dir requires a directory'
+        output_dir="$2"
+        shift 2
+        ;;
+      -h | --help)
+        usage
+        exit 0
+        ;;
+      *)
+        die "Unknown argument: $1"
+        ;;
+    esac
+  done
+}
+
+write_file_list() {
+  local list_file="$1"
+
+  {
+    git diff --name-only --diff-filter=ACMRTUXB HEAD -z
+    git ls-files --others --exclude-standard -z
+  } | sort -z -u > "$list_file"
+}
+
+file_count() {
+  local list_file="$1"
+  local count=0
+
+  while IFS= read -r -d ''; do
+    count=$((count + 1))
+  done < "$list_file"
+
+  printf '%s\n' "$count"
+}
+
+add_working_files() {
+  local archive_path="$1"
+  local list_file="$2"
+
+  xargs -0 zip -q "$archive_path" -- < "$list_file"
+}
+
+add_metadata() {
+  local archive_path="$1"
+  local manifest_path="$2"
+  local changes_path="$3"
+
+  zip -q -j "$archive_path" "$manifest_path"
+  if [[ -s "$changes_path" ]]; then
+    zip -q -j "$archive_path" "$changes_path"
+  fi
+}
+
+main() {
+  local output_dir
+  local repo_root
+  local temp_dir
+  local list_file
+  local changes_path
+  local manifest_path
+  local repo_name
+  local branch
+  local timestamp
+  local archive_path
+  local count
+
+  require_command git
+  require_command zip
+  require_command sort
+  require_command xargs
+
+  parse_args "$@"
+
+  repo_root="$(git rev-parse --show-toplevel)"
+  mkdir -p "$output_dir"
+  output_dir="$(cd "$output_dir" && pwd)"
+
+  temp_dir="$(mktemp -d)"
+  cleanup_temp_dir="$temp_dir"
+  trap cleanup EXIT
+
+  list_file="$temp_dir/files.zlist"
+  changes_path="$temp_dir/deletions-and-renames.txt"
+  manifest_path="$temp_dir/MANIFEST.txt"
+
+  cd "$repo_root" || exit 1
+
+  write_file_list "$list_file"
+  git diff --name-status --diff-filter=DR HEAD > "$changes_path"
+
+  count="$(file_count "$list_file")"
+  if [[ "$count" -eq 0 && ! -s "$changes_path" ]]; then
+    die 'No modified, staged, or untracked non-ignored files found'
+  fi
+
+  repo_name="$(remote_repo_name)"
+  branch="$(branch_name)"
+  timestamp="$(date +%Y%m%d-%H%M%S)"
+  archive_path="$output_dir/${repo_name}-${branch}-${timestamp}.zip"
+
+  {
+    printf 'Created from: %s\n' "$repo_root"
+    printf 'Remote repository: %s\n' "$repo_name"
+    printf 'Branch: %s\n' "$(git branch --show-current)"
+    printf 'Commit: %s\n' "$(git rev-parse HEAD)"
+    printf 'Created: %s\n' "$(date -Is)"
+    printf '\nFiles included:\n'
+    tr '\0' '\n' < "$list_file" | sort
+
+    if [[ -s "$changes_path" ]]; then
+      printf '\nDeleted/renamed tracked paths not applied by unzip:\n'
+      sed -n '1,$p' "$changes_path"
+    fi
+  } > "$manifest_path"
+
+  if [[ "$count" -gt 0 ]]; then
+    add_working_files "$archive_path" "$list_file"
+  fi
+  add_metadata "$archive_path" "$manifest_path" "$changes_path"
+
+  printf 'Archive: %s\n' "$archive_path"
+  printf 'Files: %s\n' "$count"
+  if [[ -s "$changes_path" ]]; then
+    printf 'Note: deletions-and-renames.txt records paths unzip cannot remove.\n'
+  fi
+}
+
+main "$@"
