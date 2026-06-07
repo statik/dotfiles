@@ -98,6 +98,27 @@ OBS SETUP
 
     The terminal now composites over whatever is behind it in your scene.
 
+PARTIAL TRANSPARENCY (TINTED BACKGROUND)
+    For a semi-transparent backdrop instead of a fully clear one, control the
+    opacity directly in OBS by editing the Browser Source Custom CSS from step
+    4. Replace 'transparent' with an rgba() fill — the fourth value is the
+    opacity, from 0 (fully clear) to 1 (fully opaque):
+
+        html, body, .xterm, .xterm-viewport { background: rgba(0, 0, 0, 0.5) !important; }
+
+        rgba alpha  Effect
+        0           fully transparent (the default)
+        0.5         half-tinted
+        0.7         mostly dark, slight show-through
+        1           fully opaque
+
+    Edit it live in the Browser Source properties — no need to restart the
+    script. This works because the terminal canvas itself is clear
+    (theme.background is #00000000 in the script), so the CSS fill behind it
+    shows through at whatever opacity you set. Don't ALSO raise the alpha on
+    theme.background, or the two tints stack and the result is darker than
+    either value implies.
+
 SIZING
     The terminal's columns/rows come from browser source pixels / font cell size.
     Measured cell size for FiraCode Nerd Font Mono at fontSize=36 is 22 px wide
