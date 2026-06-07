@@ -1,0 +1,205 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# screencast-terminal — a live, interactive terminal rendered in the browser
+# with a transparent background, served on localhost so OBS can capture it as a
+# Browser Source. Backed by a persistent tmux session that survives OBS
+# reloading the browser source. Run with --help for full documentation.
+
+PORT="${PORT:-7681}"
+SESSION="${SESSION:-obs}"
+COLS="${COLS:-90}"
+ROWS="${ROWS:-30}"
+FONT_SIZE="${FONT_SIZE:-36}"
+# Nerd Font (patched) so powerlevel10k powerline separators and icons render.
+# xterm.js has no automatic symbol fallback like Ghostty, so the primary font
+# must itself contain the Nerd Font glyphs.
+FONT_FAMILY="${FONT_FAMILY:-'FiraCode Nerd Font Mono', 'Fira Code', Menlo, monospace}"
+
+# tmux config for these sessions only, written to a fixed temp path and loaded
+# via `tmux -f`. Keeps your normal ~/.tmux.conf untouched. A fixed path is
+# overwritten each run rather than accumulating temp files.
+TMUX_CONF="${TMPDIR:-/tmp}/screencast-terminal.tmux.conf"
+
+usage() {
+  cat <<'EOF'
+screencast-terminal — transparent web terminal for OBS
+
+A live, interactive terminal rendered in the browser with a TRANSPARENT
+background, served on localhost so OBS can capture it as a Browser Source and
+composite it over other layers. Backed by a persistent tmux session, so the
+session survives OBS reloading the browser source.
+
+Built for recording TUI applications (vim, htop, lazygit, k9s, btop, or any
+full-screen terminal app) into vertical video (9:16): a 90x30 grid in
+FiraCode Nerd Font Mono at a large font size, rendered big and downscaled in
+OBS to stay crisp.
+
+USAGE
+    screencast-terminal              Start serving (creates or reuses session)
+    screencast-terminal -h|--help    Show this help
+
+    Override defaults with env vars:
+        PORT=8080 SESSION=demo FONT_SIZE=40 screencast-terminal
+
+    Variables (with defaults):
+        PORT=7681        Port ttyd serves on.
+        SESSION=obs      tmux session name.
+        COLS=90          Terminal columns.
+        ROWS=30          Terminal rows.
+        FONT_SIZE=36     Browser font size (px).
+        FONT_FAMILY=...  CSS font-family (default: FiraCode Nerd Font Mono).
+
+REQUIREMENTS
+    - macOS with Homebrew (https://brew.sh)
+    - Server: brew install ttyd tmux
+    - Font:   brew install --cask font-fira-code-nerd-font
+
+    The Nerd Font matters: xterm.js (what ttyd renders with) has no automatic
+    symbol fallback the way Ghostty does, so powerlevel10k's powerline
+    separators and icons only render if the primary font itself contains those
+    glyphs. A patched Nerd Font provides them. The font must be installed where
+    the BROWSER runs (i.e. on the OBS machine), not just where ttyd runs.
+
+RUN
+    screencast-terminal
+
+    This starts ttyd on http://localhost:7681, attached to a tmux session named
+    'obs'. Leave it running while you record. Reconnecting (or OBS reloading the
+    source) re-attaches to the SAME live session — your scrollback and any
+    running TUI app are still there. On startup the script tells you whether it
+    created a new session or is reusing one that was already running.
+
+    Stop it with Ctrl-C. The tmux session keeps running in the background; kill
+    it with `tmux kill-session -t obs` when you're done.
+
+DRIVE IT FROM YOUR REGULAR TERMINAL
+    The session is just a normal tmux session, so you can attach to it from your
+    everyday terminal (e.g. Ghostty) and type there — whatever you do shows up
+    live in the OBS capture:
+
+        tmux attach -t obs
+
+    Detach again with Ctrl-b then d; this leaves the session running for OBS.
+    The window is pinned to 90x30 (window-size manual, set by this script), so
+    attaching from a larger terminal will NOT resize and break the OBS layout —
+    your terminal just shows the 90x30 window with empty space around it.
+
+OBS SETUP
+    1. Sources -> + -> Browser, create new.
+    2. URL: http://localhost:7681
+    3. Width / Height: 2010 x 1348 — this yields exactly 90 x 30 at fontSize 36
+       with Fira Code Nerd Font Mono (see SIZING below).
+    4. Custom CSS — append this to force any stray background transparent:
+           html, body, .xterm, .xterm-viewport { background: transparent !important; }
+    5. Click OK. In the canvas, scale the source down to fit your vertical frame
+       (drag a corner with Alt/Option for crop-free resize). Downscaling keeps
+       the text crisp; never scale it UP.
+
+    The terminal now composites over whatever is behind it in your scene.
+
+SIZING
+    The terminal's columns/rows come from browser source pixels / font cell size.
+    Measured cell size for FiraCode Nerd Font Mono at fontSize=36 is 22 px wide
+    x 44 px tall, plus a small fixed overhead (scrollbar/padding). Verified:
+
+        Grid     Browser source pixels (W x H)
+        90 x 30  2010 x 1348  (recommended)
+        80 x 24  1790 x 1084
+        72 x 20  1614 x 908
+
+    After launching, verify the grid inside the terminal:
+
+        echo "$(tput cols)x$(tput lines)"
+
+    If you're a column or two off, nudge the Browser Source width by ~22 px per
+    column (or ~44 px per row) until `tput cols` reads 90. Different FONT_SIZE
+    values scale these pixel numbers proportionally.
+
+VERIFY TRANSPARENCY (30-second check)
+    1. Run screencast-terminal.
+    2. In OBS, put a bright solid color source BEHIND the browser source.
+    3. The terminal text should sit directly on that color with NO black box
+       around or behind it. If you see a black background:
+       - Confirm the Browser Source Custom CSS from step 4 above is applied.
+       - Confirm rendererType=canvas is in effect (the WebGL renderer cannot do
+         transparency) — it's set by this script.
+
+    Note: powerlevel10k segments with their own background colors stay opaque by
+    design — that's the prompt theme, not the terminal. Make them transparent in
+    your p10k config if you want the backdrop to show through the prompt too.
+EOF
+}
+
+case "${1:-}" in
+-h | --help)
+  usage
+  exit 0
+  ;;
+"") ;;
+*)
+  echo "screencast-terminal: unknown argument '$1'" >&2
+  echo "Try 'screencast-terminal --help'." >&2
+  exit 1
+  ;;
+esac
+
+# Embedded tmux config for OBS screencast sessions only (loaded via `tmux -f`).
+# Keeps your normal ~/.tmux.conf untouched.
+cat >"$TMUX_CONF" <<'EOF'
+# Hide the status bar so it doesn't appear at the bottom of the recording.
+set -g status off
+
+# Use the terminal's own (transparent) default background, not a painted color.
+set -g default-terminal "xterm-256color"
+
+# Longer scrollback for demos.
+set -g history-limit 10000
+
+# Note: window-size is pinned to "manual" by screencast-terminal AFTER the
+# session is created. Setting it here (at config-load time) crashes the tmux 3.6
+# server.
+EOF
+
+# Report whether we're reusing an existing session or starting fresh, and make
+# sure the session exists now (sized correctly) so you can attach from another
+# terminal immediately, before any browser connects.
+if tmux has-session -t "$SESSION" 2>/dev/null; then
+  echo "▶ tmux session '$SESSION' is ALREADY RUNNING — reusing it (scrollback and running processes are intact)."
+else
+  tmux -f "$TMUX_CONF" new-session -d -s "$SESSION" -x "$COLS" -y "$ROWS"
+  echo "▶ Started a NEW tmux session '$SESSION' (${COLS}x${ROWS})."
+fi
+
+# Pin the window size so attaching a second client (e.g. your Ghostty terminal)
+# can't resize and break the OBS layout. Applied here, not in the tmux config,
+# because setting window-size at config-load time crashes the tmux 3.6 server.
+tmux set -g default-size "${COLS}x${ROWS}"
+tmux set -g window-size manual
+
+cat <<EOF
+
+  Serving at:  http://localhost:$PORT   ← point an OBS Browser Source here.
+
+  Join this session from your regular terminal (e.g. Ghostty):
+      tmux attach -t $SESSION
+  Detach again (leaves it running for OBS):  Ctrl-b then d
+
+  Stop serving:            Ctrl-C here
+  Kill the session fully:  tmux kill-session -t $SESSION
+
+EOF
+
+# tmux session backs the terminal so content persists across browser reloads.
+# `new -A -s` attaches to the session (created above), or creates it if missing.
+exec ttyd \
+  --writable \
+  --port "$PORT" \
+  --client-option rendererType=canvas \
+  --client-option allowTransparency=true \
+  --client-option 'theme={"background":"#00000000","foreground":"#ffffff"}' \
+  --client-option fontSize="$FONT_SIZE" \
+  --client-option fontFamily="$FONT_FAMILY" \
+  --client-option disableLeaveAlert=true \
+  --client-option disableResizeOverlay=true \
+  tmux -f "$TMUX_CONF" new -A -s "$SESSION"
