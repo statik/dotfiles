@@ -352,10 +352,7 @@ if [ -f "$HOME/.local/bin/env" ]; then . "$HOME/.local/bin/env"; fi
 
 
 # bun completions
-[ -s "/home/emurphy/.bun/_bun" ] && source "/home/emurphy/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-export YOKE_DIR=/home/emurphy/.yoke
+# opencode
+export PATH="$HOME/.opencode/bin:$PATH"
