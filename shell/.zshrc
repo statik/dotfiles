@@ -111,13 +111,9 @@ elif [[ $platform == 'osx' ]]; then
   export PATH="$BREWPATH/bin:$BREWPATH/sbin:$PATH"
 
   # use all these gnubins (from kubernetes developer docs)
-  GNUBINS="$(find `brew --prefix`/opt -type d -follow -name gnubin -print)"
-
-  for bindir in ${GNUBINS[@]}
-  do
+  for bindir in $BREWPATH/opt/*/libexec/gnubin(/N); do
     export PATH=$bindir:$PATH
   done
-  export PATH
   # emurphy - use gnu sed
   #export PATH="$BREWPATH/opt/gnu-sed/libexec/gnubin:$PATH"
   # use gnu xargs
@@ -304,6 +300,7 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 if [[ $platform == 'osx' ]]; then
   # Secretive Config
   # export SSH_AUTH_SOCK=/Users/emurphy/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
+  export SSH_AUTH_SOCK=/Users/emurphy/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh
   # mojo stuff
   # export MODULAR_HOME="/Users/emurphy/.modular"
   # export PATH="/Users/emurphy/.modular/pkg/packages.modular.com_mojo/bin:$PATH"
@@ -341,8 +338,6 @@ fpath+=(~/dotfiles/completions)
 
 export SHELL=$(command -v $SHELL)
 
-# set up direnv
-eval "$(direnv hook zsh)"
 
 #export CLAUDE_CODE_USE_BEDROCK=1
 #export DISABLE_PROMPT_CACHING=1
@@ -350,6 +345,12 @@ eval "$(direnv hook zsh)"
 
 if [ -f "$HOME/.local/bin/env" ]; then . "$HOME/.local/bin/env"; fi
 
+# set up direnv
+eval "$(direnv hook zsh)"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/emurphy/.lmstudio/bin"
+# End of LM Studio CLI section
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
