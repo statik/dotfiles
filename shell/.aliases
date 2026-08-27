@@ -27,9 +27,9 @@ claude-local() {
 alias bt='wget http://cachefly.cachefly.net/100mb.test -O /dev/null'
 alias dig='dig +short +noshort'
 
-alias la="eza -abghl --git --color=automatic"
-alias l="eza -l --color=automatic"
-alias ls="eza -l --color=automatic --git"
+alias la="eza -abghl --git --color=auto"
+alias l="eza -l --color=auto"
+alias ls="eza -l --color=auto --git"
 alias tree="eza -l --tree --git"
 
 alias gitversion="git describe --always --dirty --tags"
