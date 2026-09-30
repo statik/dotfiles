@@ -50,16 +50,6 @@ elif [[ "$unamestr" == 'Darwin' ]]; then
    platform='osx'
 fi
 
-# initialize homebrew accounting for different locations
-if [[ -f $HOME/.homebrew/bin/brew ]]; then
-	eval $($HOME/.homebrew/bin/brew shellenv)
-elif [[ -f /opt/homebrew/bin/brew ]]; then
-	eval $(/opt/homebrew/bin/brew shellenv)
-elif [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]; then
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-else
-    echo "Could not find homebrew/linuxbrew, FIXME"
-fi
 
 if [[ -f $HOME/.config.sops/age/keys.txt ]]; then
     export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt

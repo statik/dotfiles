@@ -13,6 +13,18 @@ if [[ "$OSTYPE" == darwin* ]]; then
   export BROWSER='open'
 fi
 
+# initialize homebrew accounting for different locations
+if [[ -f $HOME/.homebrew/bin/brew ]]; then
+	eval $($HOME/.homebrew/bin/brew shellenv)
+elif [[ -f /opt/homebrew/bin/brew ]]; then
+	eval $(/opt/homebrew/bin/brew shellenv)
+elif [[ -f /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+else
+    echo "Could not find homebrew/linuxbrew, FIXME"
+fi
+
+
 #
 # Editors
 #
