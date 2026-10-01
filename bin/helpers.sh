@@ -20,7 +20,7 @@ blue=$(tput setaf 38)
 
 e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@" 
 }
-e_arrow() { printf "➜ $@\n"
+e_arrow() { printf '➜ %s\n' "$@"
 }
 e_success() { printf "${green}✔ %s${reset}\n" "$@"
 }

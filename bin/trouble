@@ -49,7 +49,7 @@ define(){ IFS=$'\n' read -r -d '' "${1}" || true; }
 
 e_header() { printf "\n${bold}${purple}==========  %s  ==========${reset}\n" "$@" 
 }
-e_arrow() { printf "➜ $@\n"
+e_arrow() { printf '➜ %s\n' "$@"
 }
 e_success() { printf "${green}✔ %s${reset}\n" "$@"
 }
