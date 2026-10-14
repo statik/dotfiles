@@ -344,9 +344,6 @@ export SHELL=$(command -v $SHELL)
 
 if [ -f "$HOME/.local/bin/env" ]; then . "$HOME/.local/bin/env"; fi
 
-# set up direnv
-eval "$(direnv hook zsh)"
-
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/emurphy/.lmstudio/bin"
 # End of LM Studio CLI section
@@ -356,3 +353,12 @@ export PATH="$PATH:/Users/emurphy/.lmstudio/bin"
 
 # opencode
 export PATH="$HOME/.opencode/bin:$PATH"
+
+# set up direnv. The first load is silent because Powerlevel10k instant prompt
+# warns about console output during startup. Errors still print.
+# Keep this block last. When direnv unloads, it restores PATH to the value
+# that PATH had at load time.
+if [[ -n $ZSHRC_TERMINAL ]]; then
+  eval "$(DIRENV_LOG_FORMAT= direnv export zsh)"
+fi
+eval "$(direnv hook zsh)"
