@@ -11,10 +11,17 @@ if [[ $(hostname) == "havendev" ]]; then
 fi
 
 
+# Tools such as Posit Assistant (pa) run `zsh -ilc cmd` with no terminal to
+# read the environment. The prompt and the line editor need a terminal, so
+# set them up only when there is one. Environment setup below still runs.
+if [[ -t 0 && -t 1 && -z $ZSH_EXECUTION_STRING ]]; then
+  ZSHRC_TERMINAL=1
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+if [[ -n $ZSHRC_TERMINAL && -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
@@ -144,7 +151,7 @@ UV_PYTHON_PREFERENCE=managed
 
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  if [[ -z "${CLAUDECODE}" ]]; then
+  if [[ -z "${CLAUDECODE}" && -n $ZSHRC_TERMINAL ]]; then
     source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
   fi
 fi
@@ -214,7 +221,7 @@ PATH="$HOME/.cargo/bin:$PATH"
 # make go installed binaries like fm available
 PATH="$HOME/go/bin:$PATH"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[[ -n $ZSHRC_TERMINAL && -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
@@ -279,11 +286,13 @@ export PATH="$PATH":"$HOME/codeql-home/codeql"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-autoload -U compinit
-compinit
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-source ~/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+if [[ -n $ZSHRC_TERMINAL ]]; then
+  autoload -U compinit
+  compinit
+  # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+  source ~/powerlevel10k/powerlevel10k.zsh-theme
+  [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+fi
 
 
 
@@ -335,9 +344,6 @@ export SHELL=$(command -v $SHELL)
 
 if [ -f "$HOME/.local/bin/env" ]; then . "$HOME/.local/bin/env"; fi
 
-# set up direnv
-eval "$(direnv hook zsh)"
-
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/emurphy/.lmstudio/bin"
 # End of LM Studio CLI section
@@ -347,3 +353,12 @@ export PATH="$PATH:/Users/emurphy/.lmstudio/bin"
 
 # opencode
 export PATH="$HOME/.opencode/bin:$PATH"
+
+# set up direnv. The first load is silent because Powerlevel10k instant prompt
+# warns about console output during startup. Errors still print.
+# Keep this block last. When direnv unloads, it restores PATH to the value
+# that PATH had at load time.
+if [[ -n $ZSHRC_TERMINAL ]]; then
+  eval "$(DIRENV_LOG_FORMAT= direnv export zsh)"
+fi
+eval "$(direnv hook zsh)"

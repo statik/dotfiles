@@ -1,0 +1,6 @@
+# direnv 2.37 reads DIRENV_LOG_FORMAT only when this file exists.
+# ~/.zshrc sets DIRENV_LOG_FORMAT to load direnv silently at shell startup.
+
+[global]
+strict_env = true
+disable_stdin = true
